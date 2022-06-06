@@ -4,7 +4,7 @@
   <id>https://pohsien324.github.io/</id>
   <title>Po-Hsien Workspace</title>
   <subtitle>Po-Hsien, pohsien, Cloud Native, Containerization, Virtualization, Linux Technologies. </subtitle>
-  <updated>2022-06-06T03:51:13+00:00</updated>
+  <updated>2022-06-06T05:16:33+00:00</updated>
   <author>
     <name>Po-Hsien Shih</name>
     <uri>https://pohsien324.github.io/</uri>
@@ -65,7 +65,7 @@ ActiveMQ 5 HA 分成兩種方式:
     <link href="https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/" rel="alternate" type="text/html" title="MariaDB Master-Slave Replication with MaxScale" />
     <published>2022-03-05T12:24:21+00:00</published>
   
-    <updated>2022-03-05T12:24:21+00:00</updated>
+    <updated>2022-06-06T03:52:26+00:00</updated>
   
     <id>https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/</id>
     <content src="https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/" />
