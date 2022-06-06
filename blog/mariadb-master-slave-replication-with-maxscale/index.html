@@ -49,8 +49,8 @@
 <meta property="og:locale" content="en" />
 <meta name="description" content="mariadb, maxscale, availability,replication, master-slave, master slave" />
 <meta property="og:description" content="mariadb, maxscale, availability,replication, master-slave, master slave" />
-<link rel="canonical" href="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" />
-<meta property="og:url" content="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" />
+<link rel="canonical" href="https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/" />
+<meta property="og:url" content="https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/" />
 <meta property="og:site_name" content="Po-Hsien Workspace" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-03-05T12:24:21+00:00" />
@@ -58,7 +58,7 @@
 <meta property="twitter:title" content="MariaDB Master-Slave Replication with MaxScale" />
 <meta name="twitter:site" content="@twitter_username" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-03-05T12:24:21+00:00","datePublished":"2022-03-05T12:24:21+00:00","description":"mariadb, maxscale, availability,replication, master-slave, master slave","headline":"MariaDB Master-Slave Replication with MaxScale","mainEntityOfPage":{"@type":"WebPage","@id":"http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/"},"url":"http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-03-05T12:24:21+00:00","datePublished":"2022-03-05T12:24:21+00:00","description":"mariadb, maxscale, availability,replication, master-slave, master slave","headline":"MariaDB Master-Slave Replication with MaxScale","mainEntityOfPage":{"@type":"WebPage","@id":"https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/"},"url":"https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -1216,6 +1216,144 @@
 
   
 
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
   
 
 
@@ -1291,7 +1429,7 @@
 
 <!-- return element -->
 <span class="readtime" data-toggle="tooltip" data-placement="bottom"
-  title="2816 words">
+  title="2819 words">
   <em>15 min</em> read</span>
 
 
@@ -1369,81 +1507,75 @@
 </ul>
 
 <p>環境:</p>
-
 <ul>
   <li>Master MariaDB <code class="language-plaintext highlighter-rouge">192.168.89.131</code></li>
   <li>Slave MariaDB <code class="language-plaintext highlighter-rouge">192.168.89.132</code></li>
 </ul>
 
-<blockquote>
+<blockquote class="prompt-tip"><div>
   <p>以下步驟開始在 Master MariaDB 上操作</p>
+</div></blockquote>
 
-  <ol>
-    <li>設定 <code class="language-plaintext highlighter-rouge">my.cnf</code> 檔，啟用 Binary Log
-      <div class="language-bash highlighter-rouge"><div class="code-header">
+<ol>
+  <li>設定 <code class="language-plaintext highlighter-rouge">my.cnf</code> 檔，啟用 Binary Log
+    <div class="language-bash highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 </pre></td><td class="rouge-code"><pre><span class="nb">mkdir</span> /root/config
 <span class="nb">touch</span> /root/config/my.cnf
-</pre></td></tr></tbody></table></code></div>      </div>
-    </li>
-  </ol>
-</blockquote>
+</pre></td></tr></tbody></table></code></div>    </div>
 
-<p><code class="language-plaintext highlighter-rouge">my.cnf</code> (在 Master-Slave Replication Cluster 裡，每台 MariaDB <code class="language-plaintext highlighter-rouge">server_id</code> 需要不一樣)</p>
-<div class="language-bash highlighter-rouge"><div class="code-header">
+    <p><code class="language-plaintext highlighter-rouge">my.cnf</code> (在 Master-Slave Replication Cluster 裡，每台 MariaDB <code class="language-plaintext highlighter-rouge">server_id</code> 需要不一樣)</p>
+    <div class="language-bash highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
-</pre></td><td class="rouge-code"><pre><span class="o">[</span>mariadb]
-log-bin
-<span class="nv">server_id</span><span class="o">=</span>1
-log-basename<span class="o">=</span>master1
-binlog-format<span class="o">=</span>mixed
-</pre></td></tr></tbody></table></code></div></div>
-
-<ol>
+</pre></td><td class="rouge-code"><pre> <span class="o">[</span>mariadb]
+ log-bin
+ <span class="nv">server_id</span><span class="o">=</span>1
+ log-basename<span class="o">=</span>master1
+ binlog-format<span class="o">=</span>mixed
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
   <li>部署 Master MariaDB
-```bash
-export IP=192.168.89.131</li>
-</ol>
-
-<p>docker run –name mariadb-master -p $IP:3306:3306 -v /root/config:/etc/mysql/conf.d -e MARIADB_ROOT_PASSWORD=123456 -d mariadb:10.3.32</p>
-<div class="language-plaintext highlighter-rouge"><div class="code-header">
-        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-4
-5
-6
-7
-8
-</pre></td><td class="rouge-code"><pre>
-&gt; 此指令為測試用，若是在 Production，請記得設定加上 Persistent Data 存放目錄以及相關帳號設定，不要使用 Root。
-&gt; 
-3. 建立 Replication 用的帳號
-```bash
-docker exec -it mariadb-master bash
+</pre></td><td class="rouge-code"><pre> <span class="nb">export </span><span class="nv">IP</span><span class="o">=</span>192.168.89.131
 
-$ mysql -u root -p123456
-</pre></td></tr></tbody></table></code></div></div>
+ docker run <span class="nt">--name</span> mariadb-master <span class="nt">-p</span> <span class="nv">$IP</span>:3306:3306 <span class="nt">-v</span> /root/config:/etc/mysql/conf.d <span class="nt">-e</span> <span class="nv">MARIADB_ROOT_PASSWORD</span><span class="o">=</span>123456 <span class="nt">-d</span> mariadb:10.3.32
+</pre></td></tr></tbody></table></code></div>    </div>
 
-<div class="language-sql highlighter-rouge"><div class="code-header">
+    <blockquote class="prompt-tip"><div>
+      <p>此指令為測試用，若是在 Production，請記得設定加上 Persistent Data 存放目錄以及相關帳號設定，不要使用 Root。</p>
+    </div></blockquote>
+  </li>
+  <li>建立 Replication 用的帳號
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre> docker <span class="nb">exec</span> <span class="nt">-it</span> mariadb-master bash
+
+ <span class="nv">$ </span>mysql <span class="nt">-u</span> root <span class="nt">-p123456</span>
+</pre></td></tr></tbody></table></code></div>    </div>
+    <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-</pre></td><td class="rouge-code"><pre><span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="n">REPLICATION</span> <span class="n">SLAVE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">replicator</span><span class="o">@</span><span class="s1">'%'</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">'secret'</span><span class="p">;</span>
-<span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
-<span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="n">FLUSH</span> <span class="n">TABLES</span> <span class="k">WITH</span> <span class="k">READ</span> <span class="k">LOCK</span><span class="p">;</span>
-</pre></td></tr></tbody></table></code></div></div>
-
-<ol>
+</pre></td><td class="rouge-code"><pre> <span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="k">GRANT</span> <span class="n">REPLICATION</span> <span class="n">SLAVE</span> <span class="k">ON</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">replicator</span><span class="o">@</span><span class="s1">'%'</span> <span class="n">IDENTIFIED</span> <span class="k">BY</span> <span class="s1">'secret'</span><span class="p">;</span>
+ <span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="n">FLUSH</span> <span class="k">PRIVILEGES</span><span class="p">;</span>
+ <span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="n">FLUSH</span> <span class="n">TABLES</span> <span class="k">WITH</span> <span class="k">READ</span> <span class="k">LOCK</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
   <li>查看 Master 資訊，需記下 Binary Log 名稱
     <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
@@ -1462,91 +1594,80 @@ $ mysql -u root -p123456
 <span class="o">+</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="o">+</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="o">+</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="o">+</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="err">—</span> <span class="o">+</span>
 <span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
 </pre></td></tr></tbody></table></code></div>    </div>
+
+    <blockquote class="prompt-tip"><div>
+      <p>以下步驟開始在 Slave MariaDB 上操作</p>
+    </div></blockquote>
   </li>
-</ol>
-
-<blockquote>
-  <p>以下步驟開始在 Slave MariaDB 上操作</p>
-
-</blockquote>
-
-<ol>
   <li>設定 <code class="language-plaintext highlighter-rouge">my.cnf</code> 檔，啟用 Binary Log
     <div class="language-bash highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre><span class="nb">mkdir</span> /root/config
-<span class="nb">touch</span> /root/config/my.cnf
+</pre></td><td class="rouge-code"><pre> <span class="nb">mkdir</span> /root/config
+ <span class="nb">touch</span> /root/config/my.cnf
 </pre></td></tr></tbody></table></code></div>    </div>
-  </li>
-</ol>
 
-<p><code class="language-plaintext highlighter-rouge">my.cnf</code> (在 Master-Slave Replication Cluster 裡，每台 MariaDB <code class="language-plaintext highlighter-rouge">server_id</code> 需要不一樣)</p>
-<div class="language-bash highlighter-rouge"><div class="code-header">
+    <p><code class="language-plaintext highlighter-rouge">my.cnf</code> (在 Master-Slave Replication Cluster 裡，每台 MariaDB <code class="language-plaintext highlighter-rouge">server_id</code> 需要不一樣)</p>
+    <div class="language-bash highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre></td><td class="rouge-code"><pre><span class="o">[</span>mariadb]
-<span class="nv">server_id</span><span class="o">=</span>2
-</pre></td></tr></tbody></table></code></div></div>
-
-<ol>
-  <li>部署 Slave  MariaDB
-```bash
-export IP=<slave node="" IP=""></slave></li>
-</ol>
-
-<p>docker run –name mariadb-slave -p $IP:3306:3306 -v /root/config:/etc/mysql/conf.d -e MARIADB_ROOT_PASSWORD=123456 -d mariadb:10.3.32</p>
-<div class="language-plaintext highlighter-rouge"><div class="code-header">
-        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+</pre></td><td class="rouge-code"><pre> <span class="o">[</span>mariadb]
+ <span class="nv">server_id</span><span class="o">=</span>2
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>部署 Slave  MariaDB 。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-4
-5
-6
-7
-8
-</pre></td><td class="rouge-code"><pre>
-&gt; 此指令為測試用，若是在 Production，請記得設定加上 Persistent Data 存放目錄以及相關帳號設定，不要使用 Root。
-&gt; 
-7. 設定連到 Master MariaDB，並啟用 Slave 服務， `CHANGE MASTER` 根據 Master 資訊填寫
-```bash
-docker exec -it mariadb-slave bash
+</pre></td><td class="rouge-code"><pre> <span class="nb">export </span><span class="nv">IP</span><span class="o">=</span>&lt;slave node IP&gt;
 
-$ mysql -u root -p123456
-</pre></td></tr></tbody></table></code></div></div>
-<div class="language-sql highlighter-rouge"><div class="code-header">
+ docker run <span class="nt">--name</span> mariadb-slave <span class="nt">-p</span> <span class="nv">$IP</span>:3306:3306 <span class="nt">-v</span> /root/config:/etc/mysql/conf.d <span class="nt">-e</span> <span class="nv">MARIADB_ROOT_PASSWORD</span><span class="o">=</span>123456 <span class="nt">-d</span> mariadb:10.3.32
+</pre></td></tr></tbody></table></code></div>    </div>
+
+    <blockquote class="prompt-tip"><div>
+      <p>此指令為測試用，若是在 Production，請記得設定加上 Persistent Data 存放目錄以及相關帳號設定，不要使用 Root。</p>
+    </div></blockquote>
+  </li>
+  <li>設定連到 Master MariaDB，並啟用 Slave 服務， <code class="language-plaintext highlighter-rouge">CHANGE MASTER</code> 根據 Master 資訊填寫。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre> docker <span class="nb">exec</span> <span class="nt">-it</span> mariadb-slave bash
+
+ <span class="nv">$ </span>mysql <span class="nt">-u</span> root <span class="nt">-p123456</span>
+</pre></td></tr></tbody></table></code></div>    </div>
+    <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-</pre></td><td class="rouge-code"><pre><span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="n">CHANGE</span> <span class="n">MASTER</span> <span class="k">TO</span> <span class="n">MASTER_HOST</span><span class="o">=</span><span class="s1">'192.168.89.131'</span><span class="p">,</span> <span class="n">MASTER_USER</span><span class="o">=</span><span class="s1">'replicator'</span><span class="p">,</span> <span class="n">MASTER_PASSWORD</span><span class="o">=</span><span class="s1">'secret'</span><span class="p">,</span> <span class="n">MASTER_LOG_FILE</span><span class="o">=</span><span class="s1">'master1-bin.000003'</span><span class="p">,</span> <span class="n">MASTER_LOG_POS</span><span class="o">=</span><span class="mi">466</span><span class="p">;</span>
+</pre></td><td class="rouge-code"><pre> <span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="n">CHANGE</span> <span class="n">MASTER</span> <span class="k">TO</span> <span class="n">MASTER_HOST</span><span class="o">=</span><span class="s1">'192.168.89.131'</span><span class="p">,</span> <span class="n">MASTER_USER</span><span class="o">=</span><span class="s1">'replicator'</span><span class="p">,</span> <span class="n">MASTER_PASSWORD</span><span class="o">=</span><span class="s1">'secret'</span><span class="p">,</span> <span class="n">MASTER_LOG_FILE</span><span class="o">=</span><span class="s1">'master1-bin.000003'</span><span class="p">,</span> <span class="n">MASTER_LOG_POS</span><span class="o">=</span><span class="mi">466</span><span class="p">;</span>
 
-<span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="k">START</span> <span class="n">SLAVE</span><span class="p">;</span>
-</pre></td></tr></tbody></table></code></div></div>
+ <span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="k">START</span> <span class="n">SLAVE</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div>    </div>
 
-<blockquote>
-  <p><code class="language-plaintext highlighter-rouge">MASTER_LOG_FILE</code> 代表要去讀 Master 的 Binary Log 名稱
+    <blockquote>
+      <p><code class="language-plaintext highlighter-rouge">MASTER_LOG_FILE</code> 代表要去讀 Master 的 Binary Log 名稱<br />
 <code class="language-plaintext highlighter-rouge">MASTER_LOG_POS</code> 代表要從 Binary Log 哪一個位置開始同步，需跟 <code class="language-plaintext highlighter-rouge">SHOW MASTER STATUS;</code> 的 <code class="language-plaintext highlighter-rouge">Position</code>  值一樣。</p>
-
-  <ol>
-    <li>查看 Slave 資訊 (需確認 <code class="language-plaintext highlighter-rouge">Slave_IO_Running</code> 以及 <code class="language-plaintext highlighter-rouge">Slave_SQL_Running</code> 是否為 <code class="language-plaintext highlighter-rouge">Yes</code>)
-      <div class="language-sql highlighter-rouge"><div class="code-header">
+    </blockquote>
+  </li>
+  <li>查看 Slave 資訊 (需確認 <code class="language-plaintext highlighter-rouge">Slave_IO_Running</code> 以及 <code class="language-plaintext highlighter-rouge">Slave_SQL_Running</code> 是否為 <code class="language-plaintext highlighter-rouge">Yes</code>)
+    <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="k">SHOW</span> <span class="n">SLAVE</span> <span class="n">STATUS</span><span class="p">;</span>
-</pre></td></tr></tbody></table></code></div>      </div>
-    </li>
-  </ol>
-</blockquote>
+</pre></td><td class="rouge-code"><pre> <span class="n">MariaDB</span> <span class="p">[(</span><span class="k">none</span><span class="p">)]</span><span class="o">&gt;</span> <span class="k">SHOW</span> <span class="n">SLAVE</span> <span class="n">STATUS</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></div>    </div>
 
-<blockquote>
-  <p>以下步驟開始在 Master MariaDB 上操作</p>
-</blockquote>
-
-<ol>
+    <blockquote class="prompt-tip"><div>
+      <p>以下步驟開始在 Master MariaDB 上操作</p>
+    </div></blockquote>
+  </li>
   <li>UNLOCK Master MariaDB Table。
     <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
@@ -1555,22 +1676,8 @@ $ mysql -u root -p123456
 </pre></td></tr></tbody></table></code></div>    </div>
   </li>
   <li>這樣就完成，可以嘗試看看透過 Master 進行寫入動作，Slave 那邊是否會同步。
-```bash
-MariaDB [(none)]&gt; CREATE DATABASE hello;
-MariaDB [(none)]&gt; USE hello;
-MariaDB [hello]&gt;  CREATE TABLE hellotable (<code class="language-plaintext highlighter-rouge">id</code> int, <code class="language-plaintext highlighter-rouge">name</code> varchar(10) ) ;
-MariaDB [hello]&gt; INSERT INTO hellotable (<code class="language-plaintext highlighter-rouge">id</code>,<code class="language-plaintext highlighter-rouge">name</code>) VALUES (‘1’,’pohsien’) ;</li>
-</ol>
-
-<p>MariaDB [hello]&gt; SELECT * FROM hellotable;
-+——+———+
-| id   | name    |
-+——+———+
-|    1 | pohsien |
-+——+———+
-1 row in set (0.000 sec)</p>
-<div class="language-plaintext highlighter-rouge"><div class="code-header">
-        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -1583,29 +1690,45 @@ MariaDB [hello]&gt; INSERT INTO hellotable (<code class="language-plaintext high
 10
 11
 12
-13
-14
-15
-16
-</pre></td><td class="rouge-code"><pre>
+</pre></td><td class="rouge-code"><pre>MariaDB <span class="o">[(</span>none<span class="o">)]&gt;</span> CREATE DATABASE hello<span class="p">;</span>
+MariaDB <span class="o">[(</span>none<span class="o">)]&gt;</span> USE hello<span class="p">;</span>
+MariaDB <span class="o">[</span>hello]&gt;  CREATE TABLE hellotable <span class="o">(</span><span class="sb">`</span><span class="nb">id</span><span class="sb">`</span> int, <span class="sb">`</span>name<span class="sb">`</span> varchar<span class="o">(</span>10<span class="o">)</span> <span class="o">)</span> <span class="p">;</span>
+MariaDB <span class="o">[</span>hello]&gt; INSERT INTO hellotable <span class="o">(</span><span class="sb">`</span><span class="nb">id</span><span class="sb">`</span>,<span class="sb">`</span>name<span class="sb">`</span><span class="o">)</span> VALUES <span class="o">(</span><span class="s1">'1'</span>,<span class="s1">'pohsien'</span><span class="o">)</span> <span class="p">;</span>
 
-&gt; 以下步驟開始在 Slave MariaDB 上操作
-
-
-11. 在 Slave 可以馬上看到剛剛在 Master 建立的 DB、Table 以及 Record。
-```bash
-
-MariaDB [(none)]&gt; USE hello;
-MariaDB [hello]&gt; SELECT * FROM hellotable;
+MariaDB <span class="o">[</span>hello]&gt; SELECT <span class="k">*</span> FROM hellotable<span class="p">;</span>
 +------+---------+
-| id   | name    |
+| <span class="nb">id</span>   | name    |
 +------+---------+
 |    1 | pohsien |
 +------+---------+
-1 row in set (0.000 sec)
-</pre></td></tr></tbody></table></code></div></div>
+1 row <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.000 sec<span class="o">)</span>
+</pre></td></tr></tbody></table></code></div>    </div>
 
-<ol>
+    <blockquote class="prompt-tip"><div>
+      <p>以下步驟開始在 Slave MariaDB 上操作</p>
+    </div></blockquote>
+  </li>
+  <li>在 Slave 可以馬上看到剛剛在 Master 建立的 DB、Table 以及 Record。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>MariaDB <span class="o">[(</span>none<span class="o">)]&gt;</span> USE hello<span class="p">;</span>
+MariaDB <span class="o">[</span>hello]&gt; SELECT <span class="k">*</span> FROM hellotable<span class="p">;</span>
++------+---------+
+| <span class="nb">id</span>   | name    |
++------+---------+
+|    1 | pohsien |
++------+---------+
+1 row <span class="k">in </span><span class="nb">set</span> <span class="o">(</span>0.000 sec<span class="o">)</span>
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
   <li>後續可以搭配 HA Proxy 以及程式端設定讀寫分離，讓程式寫入資料時到 Master 上去寫，要讀的時候，就透過 HA Proxy Load Balancing 到任一台 Slave 去讀，可以提高效率以及增加高可用性。</li>
 </ol>
 
@@ -1654,29 +1777,8 @@ MariaDB [hello]&gt; SELECT * FROM hellotable;
 </pre></td></tr></tbody></table></code></div>    </div>
   </li>
   <li>建立三台 MariaDB 資訊， <code class="language-plaintext highlighter-rouge">[]</code> 名稱可以任意取名，這邊設定很像設定 Load Balancer 的 Server Pool (Backend) 一樣。
-```bash
-…
-[server1]
-type=server
-address=192.168.89.131
-port=3306
-protocol=MariaDBBackend</li>
-</ol>
-
-<p>[server2]
-type=server
-address=192.168.89.132
-port=3306
-protocol=MariaDBBackend</p>
-
-<p>[server3]
-type=server
-address=192.168.89.133
-port=3306
-protocol=MariaDBBackend
-…</p>
-<div class="language-plaintext highlighter-rouge"><div class="code-header">
-        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
@@ -1693,37 +1795,71 @@ protocol=MariaDBBackend
 14
 15
 16
-</pre></td><td class="rouge-code"><pre>
-4. 設定 Monitor，監控 MariaDB 的狀態，其中這裡也可以設定 `auto_failover` 以及 `auto_rejoin` 來實現 Master 身份自動轉移以及自動將排除異常的 Node 重新加回 Cluster。
-```bash
-...
-[MariaDB-Monitor]
-type=monitor
-module=mariadbmon
-servers=server1,server2,server3
-user=root
-password=123456
-monitor_interval=2000
-# 啟用自動 Failover
-auto_failover=true
-# 啟用自動 rejoin
-auto_rejoin=true
-...
-</pre></td></tr></tbody></table></code></div></div>
+17
+18
+19
+</pre></td><td class="rouge-code"><pre> ...
+ <span class="o">[</span>server1]
+ <span class="nb">type</span><span class="o">=</span>server
+ <span class="nv">address</span><span class="o">=</span>192.168.89.131
+ <span class="nv">port</span><span class="o">=</span>3306
+ <span class="nv">protocol</span><span class="o">=</span>MariaDBBackend
 
-<ol>
+ <span class="o">[</span>server2]
+ <span class="nb">type</span><span class="o">=</span>server
+ <span class="nv">address</span><span class="o">=</span>192.168.89.132
+ <span class="nv">port</span><span class="o">=</span>3306
+ <span class="nv">protocol</span><span class="o">=</span>MariaDBBackend
+
+ <span class="o">[</span>server3]
+ <span class="nb">type</span><span class="o">=</span>server
+ <span class="nv">address</span><span class="o">=</span>192.168.89.133
+ <span class="nv">port</span><span class="o">=</span>3306
+ <span class="nv">protocol</span><span class="o">=</span>MariaDBBackend
+ ...
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>設定 Monitor，監控 MariaDB 的狀態，其中這裡也可以設定 <code class="language-plaintext highlighter-rouge">auto_failover</code> 以及 <code class="language-plaintext highlighter-rouge">auto_rejoin</code> 來實現 Master 身份自動轉移以及自動將排除異常的 Node 重新加回 Cluster。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre>...
+<span class="o">[</span>MariaDB-Monitor]
+<span class="nb">type</span><span class="o">=</span>monitor
+<span class="nv">module</span><span class="o">=</span>mariadbmon
+<span class="nv">servers</span><span class="o">=</span>server1,server2,server3
+<span class="nv">user</span><span class="o">=</span>root
+<span class="nv">password</span><span class="o">=</span>123456
+<span class="nv">monitor_interval</span><span class="o">=</span>2000
+<span class="c"># 啟用自動 Failover</span>
+<span class="nv">auto_failover</span><span class="o">=</span><span class="nb">true</span>
+<span class="c"># 啟用自動 rejoin</span>
+<span class="nv">auto_rejoin</span><span class="o">=</span><span class="nb">true</span>
+...
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
   <li>
     <p>設定 Service (路由)，預設是讀寫分開，這邊可以設定 Listener 以及 Backend，可以將讀寫切分成不同的 Listener，並對應到不同的 Backend。</p>
 
     <p>在此我們將 Write 的動作都導向到 Master MariaDB 身上，Read 的動作則導向到 Slave MariaDB 身上，MaxScale 會自己判斷身份，所以只要將全部 MariaDB 都加進 Service 就好。</p>
-  </li>
-</ol>
 
-<blockquote class="prompt-warning"><div>
-  <p>💡 若要讀寫分開也必須看自己的 Application 是否有支援這樣設計</p>
-</div></blockquote>
+    <blockquote class="prompt-warning"><div>
+      <p>若要讀寫分開也必須看自己的 Application 是否有支援這樣設計</p>
+    </div></blockquote>
 
-<div class="language-bash highlighter-rouge"><div class="code-header">
+    <div class="language-bash highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
@@ -1766,65 +1902,64 @@ auto_rejoin=true
 39
 40
 41
-</pre></td><td class="rouge-code"><pre>...
+</pre></td><td class="rouge-code"><pre> ...
 
-<span class="c">#--------- Services (LoadBalancr 後端的 Server Pool) ----------</span>
+ <span class="c">#--------- Services (LoadBalancr 後端的 Server Pool) ----------</span>
 
-<span class="c">## 給 Reqd-Only 使用</span>
-<span class="o">[</span>Read-Only-Service]
-<span class="nb">type</span><span class="o">=</span>service
-<span class="nv">router</span><span class="o">=</span>readconnroute
-<span class="c"># 這邊設定要當作 Backend 的 Server</span>
-<span class="nv">servers</span><span class="o">=</span>server1,server2,server3
-<span class="nv">user</span><span class="o">=</span>maxscale
-<span class="nv">password</span><span class="o">=</span>123456
-<span class="c"># 設定要作為 Backend 的種類，這裡表示會從 servers Group 裡面挑出 Slave 來做 LoadBalancing</span>
-<span class="nv">router_options</span><span class="o">=</span>slave
+ <span class="c">## 給 Reqd-Only 使用</span>
+ <span class="o">[</span>Read-Only-Service]
+ <span class="nb">type</span><span class="o">=</span>service
+ <span class="nv">router</span><span class="o">=</span>readconnroute
+ <span class="c"># 這邊設定要當作 Backend 的 Server</span>
+ <span class="nv">servers</span><span class="o">=</span>server1,server2,server3
+ <span class="nv">user</span><span class="o">=</span>maxscale
+ <span class="nv">password</span><span class="o">=</span>123456
+ <span class="c"># 設定要作為 Backend 的種類，這裡表示會從 servers Group 裡面挑出 Slave 來做 LoadBalancing</span>
+ <span class="nv">router_options</span><span class="o">=</span>slave
 
-<span class="c">## 給 Read-Write 使用 </span>
-<span class="o">[</span>Read-Write-Service]
-<span class="nb">type</span><span class="o">=</span>service
-<span class="nv">router</span><span class="o">=</span>readconnroute
-<span class="c"># 這邊設定要當作 Backend 的 Server</span>
-<span class="nv">servers</span><span class="o">=</span>server1,server2,server3
-<span class="nv">user</span><span class="o">=</span>maxscale
-<span class="nv">password</span><span class="o">=</span>123456
-<span class="c"># 設定要作為 Backend 的種類，這裡表示會從 servers Group 裡面挑出 Master 來做 LoadBalancing</span>
-<span class="nv">router_options</span><span class="o">=</span>master
+ <span class="c">## 給 Read-Write 使用 </span>
+ <span class="o">[</span>Read-Write-Service]
+ <span class="nb">type</span><span class="o">=</span>service
+ <span class="nv">router</span><span class="o">=</span>readconnroute
+ <span class="c"># 這邊設定要當作 Backend 的 Server</span>
+ <span class="nv">servers</span><span class="o">=</span>server1,server2,server3
+ <span class="nv">user</span><span class="o">=</span>maxscale
+ <span class="nv">password</span><span class="o">=</span>123456
+ <span class="c"># 設定要作為 Backend 的種類，這裡表示會從 servers Group 裡面挑出 Master 來做 LoadBalancing</span>
+ <span class="nv">router_options</span><span class="o">=</span>master
 
-<span class="c">#----------- Listeners (LoadBalancr 前端的窗口) --------------</span>
-<span class="o">[</span>Read-Only-Listener]
-<span class="nb">type</span><span class="o">=</span>listener
-<span class="nv">service</span><span class="o">=</span>Read-Only-Service
-<span class="nv">protocol</span><span class="o">=</span>MariaDBClient
-<span class="nv">address</span><span class="o">=</span>192.168.89.134
-<span class="nv">port</span><span class="o">=</span>4008
+ <span class="c">#----------- Listeners (LoadBalancr 前端的窗口) --------------</span>
+ <span class="o">[</span>Read-Only-Listener]
+ <span class="nb">type</span><span class="o">=</span>listener
+ <span class="nv">service</span><span class="o">=</span>Read-Only-Service
+ <span class="nv">protocol</span><span class="o">=</span>MariaDBClient
+ <span class="nv">address</span><span class="o">=</span>192.168.89.134
+ <span class="nv">port</span><span class="o">=</span>4008
 
-<span class="o">[</span>Read-Write-Listener]
-<span class="nb">type</span><span class="o">=</span>listener
-<span class="nv">service</span><span class="o">=</span>Read-Write-Service
-<span class="nv">protocol</span><span class="o">=</span>MariaDBClient
-<span class="nv">port</span><span class="o">=</span>4006
-<span class="nv">address</span><span class="o">=</span>192.168.89.134
-...
-</pre></td></tr></tbody></table></code></div></div>
+ <span class="o">[</span>Read-Write-Listener]
+ <span class="nb">type</span><span class="o">=</span>listener
+ <span class="nv">service</span><span class="o">=</span>Read-Write-Service
+ <span class="nv">protocol</span><span class="o">=</span>MariaDBClient
+ <span class="nv">port</span><span class="o">=</span>4006
+ <span class="nv">address</span><span class="o">=</span>192.168.89.134
+ ...
+</pre></td></tr></tbody></table></code></div>    </div>
 
-<blockquote class="prompt-warning"><div>
-  <p>💡 這邊的 <code class="language-plaintext highlighter-rouge">user</code> <code class="language-plaintext highlighter-rouge">password</code> 是給 MaxScale 使用的，因為 MaxScale 主要接收 Client 連線的窗口，所以他會需要權限能夠讀 MariaDB 的 User 資訊以及連到 MariaDB 去做一些操作，例如修改 Master-Slave 設定，可查看 <a href="https://mariadb.com/kb/en/mariadb-maxscale-62-setting-up-mariadb-maxscale/#creating-a-user-account-for-maxscale">Creating a user account for MaxScale</a> 。</p>
-</div></blockquote>
-
-<ol>
+    <blockquote class="prompt-warning"><div>
+      <p>💡 這邊的 <code class="language-plaintext highlighter-rouge">user</code> <code class="language-plaintext highlighter-rouge">password</code> 是給 MaxScale 使用的，因為 MaxScale 主要接收 Client 連線的窗口，所以他會需要權限能夠讀 MariaDB 的 User 資訊以及連到 MariaDB 去做一些操作，例如修改 Master-Slave 設定，可查看 <a href="https://mariadb.com/kb/en/mariadb-maxscale-62-setting-up-mariadb-maxscale/#creating-a-user-account-for-maxscale">Creating a user account for MaxScale</a> 。</p>
+    </div></blockquote>
+  </li>
   <li>完成後重啟 MaxScale，這樣設定完之後，連線資訊如下:
     <ul>
       <li>Read 使用的連線資訊:  <code class="language-plaintext highlighter-rouge">192.168.89.134:4008</code></li>
-      <li>Write 使用的連線資訊: <code class="language-plaintext highlighter-rouge">192.168.89.134.4006</code>
-        <div class="language-bash highlighter-rouge"><div class="code-header">
+      <li>Write 使用的連線資訊: <code class="language-plaintext highlighter-rouge">192.168.89.134.4006</code></li>
+    </ul>
+
+    <div class="language-bash highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>systemctl restart maxscale.service
-</pre></td></tr></tbody></table></code></div>        </div>
-      </li>
-    </ul>
+</pre></td><td class="rouge-code"><pre> <span class="nv">$ </span>systemctl restart maxscale.service
+</pre></td></tr></tbody></table></code></div>    </div>
   </li>
   <li>在 MaxScale VM 查看 Monitor 資訊，如果把 Master 關機，可以看到 State 切換，也可以參考 <a href="https://mariadb.com/kb/en/mariadb-maxscale-62-automatic-failover-with-mariadb-monitor/#manual-failover">Manual Failover</a> 手動切換角色 <code class="language-plaintext highlighter-rouge">maxctrl call command mariadbmon failover Monitor</code> 。
     <div class="language-bash highlighter-rouge"><div class="code-header">
@@ -1859,14 +1994,11 @@ auto_rejoin=true
 </pre></td><td class="rouge-code"><pre><span class="nv">$ </span>msql <span class="nt">-h</span> 192.168.89.134 <span class="nt">-P</span> 4006 <span class="nt">-u</span> myuser <span class="nt">-p</span>
 <span class="nv">$ </span>msql <span class="nt">-h</span> 192.168.89.134 <span class="nt">-P</span> 4008 <span class="nt">-u</span> myuser <span class="nt">-p</span>
 </pre></td></tr></tbody></table></code></div>    </div>
+
+    <blockquote class="prompt-warning"><div>
+      <p>💡 這邊的使用者是給 application 連線用的，這個需要注意，因為連線方式是: <code class="language-plaintext highlighter-rouge">client</code> → <code class="language-plaintext highlighter-rouge">maxscale</code>  → <code class="language-plaintext highlighter-rouge">mariadb</code> ，所以需要設定這個使用者能從 <code class="language-plaintext highlighter-rouge">client</code> 端以及 <code class="language-plaintext highlighter-rouge">maxscale</code> 連到 MariaDB，可參考 <a href="https://mariadb.com/kb/en/mariadb-maxscale-62-setting-up-mariadb-maxscale/#creating-client-user-accounts">Creating client user accounts</a></p>
+    </div></blockquote>
   </li>
-</ol>
-
-<blockquote class="prompt-warning"><div>
-  <p>💡 這邊的使用者是給 application 連線用的，這個需要注意，因為連線方式是: <code class="language-plaintext highlighter-rouge">client</code> → <code class="language-plaintext highlighter-rouge">maxscale</code>  → <code class="language-plaintext highlighter-rouge">mariadb</code> ，所以需要設定這個使用者能從 <code class="language-plaintext highlighter-rouge">client</code> 端以及 <code class="language-plaintext highlighter-rouge">maxscale</code> 連到 MariaDB，可參考 <a href="https://mariadb.com/kb/en/mariadb-maxscale-62-setting-up-mariadb-maxscale/#creating-client-user-accounts">Creating client user accounts</a></p>
-</div></blockquote>
-
-<ol>
   <li>若透過 <code class="language-plaintext highlighter-rouge">4006</code> port 成功連到 MariaDB，查看連到的 DB Server id，應該不管在哪裡連都會是 Master 那台 Node。
     <div class="language-bash highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
@@ -2003,19 +2135,19 @@ auto_rejoin=true
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=MariaDB Master-Slave Replication with MaxScale - Po-Hsien Workspace&amp;url=http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=MariaDB Master-Slave Replication with MaxScale - Po-Hsien Workspace&amp;url=https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=MariaDB Master-Slave Replication with MaxScale - Po-Hsien Workspace&amp;u=http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=MariaDB Master-Slave Replication with MaxScale - Po-Hsien Workspace&amp;u=https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/&amp;text=MariaDB Master-Slave Replication with MaxScale - Po-Hsien Workspace" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=https://pohsien324.github.io/blog/mariadb-master-slave-replication-with-maxscale/&amp;text=MariaDB Master-Slave Replication with MaxScale - Po-Hsien Workspace" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
