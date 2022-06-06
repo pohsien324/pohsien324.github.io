@@ -49,7 +49,7 @@ const allowedDomains = [
     'www.google-analytics.com',
   
 
-  'pohsien324.github.io',
+  'blog.phshih.com',
 
   
 

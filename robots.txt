@@ -2,4 +2,4 @@ User-agent: *
 
 Disallow: /norobots/
 
-Sitemap: https://pohsien324.github.io/sitemap.xml
+Sitemap: https://blog.phshih.com/sitemap.xml
