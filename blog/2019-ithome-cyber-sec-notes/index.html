@@ -1,9 +1,2937 @@
-<!DOCTYPE html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="keywords" content="2019, ithome, security, 資安大會, cybersec"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="2019 iThome資安大會筆記" /><meta property="og:locale" content="en" /><meta name="description" content="2019,ithome,security,資安大會,cybersec" /><meta property="og:description" content="2019,ithome,security,資安大會,cybersec" /><link rel="canonical" href="https://blog.phshih.com/blog/2019-ithome-cyber-sec-notes/" /><meta property="og:url" content="https://blog.phshih.com/blog/2019-ithome-cyber-sec-notes/" /><meta property="og:site_name" content="Po-Hsien Workspace" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2019-05-26T23:17:07+00:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="2019 iThome資安大會筆記" /><meta name="twitter:site" content="@twitter_username" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2019-05-26T23:17:07+00:00","datePublished":"2019-05-26T23:17:07+00:00","description":"2019,ithome,security,資安大會,cybersec","headline":"2019 iThome資安大會筆記","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.phshih.com/blog/2019-ithome-cyber-sec-notes/"},"url":"https://blog.phshih.com/blog/2019-ithome-cyber-sec-notes/"}</script><title>2019 iThome資安大會筆記 | Po-Hsien Workspace</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Po-Hsien Workspace"><meta name="application-name" content="Po-Hsien Workspace"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src=" /assets/images/pohsien.jpg " alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">Po-Hsien Workspace</a></div><div class="site-subtitle font-italic">Cloud Native, Containerization, Virtualization, Linux Technologies.</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/pohsien324" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['pohsien324','gmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="https://www.linkedin.com/in/po-hsien-shih-23bbb1162/" aria-label="linkedin" target="_blank" rel="noopener"> <i class="fab fa-linkedin"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>2019 iThome資安大會筆記</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>2019 iThome資安大會筆記</h1><div class="post-meta text-muted"><div> By <em> <a href="https://github.com/username">Po-Hsien Shih</a> </em></div><div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1558912627" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" > 2019-05-26 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="4841 words"> <em>26 min</em> read</span></div></div></div><div class="post-content"><p>這篇主要是補上今年3月份參加iThome資安大會的一些筆記跟小小心得。今年的資安大會與往年一樣都在台北國際會議中心舉辦，不過由於我第一天有事情，因此今年只有參加到後面兩天，挺可惜的，不過後面兩天也蠻多精彩的演講(雖然大部分還是推銷產品居多)，以下就是我的一些小小筆記，如果想暸解更細部的話，目前簡報已經都釋出在官網上了，可以去參考～</p><p>議程: <a href="https://cyber.ithome.com.tw/agenda">https://cyber.ithome.com.tw/agenda</a></p><h1 id="320">3/20</h1><h2 id="keynote-正面迎戰內部威脅公司被害還是員工被駭"><span class="mr-2">Keynote 正面迎戰內部威脅，公司被害還是員工被駭?!</span><a href="#keynote-正面迎戰內部威脅公司被害還是員工被駭" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>「研發部門是企業命脈，卻最難管理」，鎖太多權限可能導致開發人員沒辦法安裝套件或是一些撰寫的一些程式功能無法執行，但是開發人員有可能會藉由一些方式(如IDE)，使用看起來合法的操作來將企業資料攜出。<li>為了避免這樣，精品科技開發的產品能夠讓IT人員針對特定IDE去所權限，例如可以設定visual code所執行的CMD沒辦法用來上網或是沒辦法執行敏感指令(copy &amp; paste)，正常情況下的CMD沒事，但是只要是從IDE叫出來的CMD就鎖權限。另外也可擋掉IDE上面的code在執行某些敏感的動作。<li>除了IDE以外，另外也可以限制如Office這種軟體，權限可以設定的很彈性，例如可以設定只能把文字從外部複製貼上到Word，但是不能從Word把資料複製出來等。<li>原理推測是透過在端點執行Agent直接去對Windows底層的API去做阻擋，因為不管什麼操作都還是要靠Windows 底層的API來完成，因此直接去鎖底層就可以達到這樣的管理。</ul><h2 id="cyberlab-趨勢科技-target-ransom"><span class="mr-2">Cyberlab 趨勢科技 Target ransom</span><a href="#cyberlab-趨勢科技-target-ransom" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>實機課程，由於禁止將講義跟參考資料帶出，因此只能簡單概述實機內容。<li>現在勒鎖軟體已經不一定要使用一些非法的程式，許多駭客已經開始使用「正當合法軟體」來作加密的動作(如winrar)，這樣可以避免防毒的偵測。<li>一般企業中勒鎖病毒都以為只要把中的那台還原或是把資料從備份倒回來就好，但是這樣治標不治本，因為駭客還是存在公司裡，也許他是透過內網裡某台跳板機來攻擊目標，但往往IT人員都只會把焦點放在被攻擊的目標上，以為是那台被駭。要如何追查APT攻擊怎麼造成的對於IT人員來說是非常的困難，透過趨勢科技的APEX產品，就可以幫助IT人員方便的查找問題。<li>實機操作就是試著扮演駭客透過跳板機去打下AD Server，然後再試著扮演網管人員去追查攻擊流程。</ul><p><strong>學員扮演角色：駭客:</strong></p><p><strong>Step 1:</strong> 首先連到企業的一個網站</p><p><strong>Step 2:</strong> 透過聯絡我們上傳照片功能，上傳Webshell到網站。</p><p><strong>Step 3:</strong> 直接在網站上執行Webshell，新增一個使用者並提權為管理者，然後了解一下Web Server相關資訊(hostname、Web server version…)</p><p><strong>Step 4:</strong> 發現Web Server是Windows Server IIS。</p><p><strong>Step 5:</strong> 嘗試能不能遠端桌面，不能，可能是防火牆擋住或是沒開RDP功能。</p><p><strong>Step 6:</strong> 透過Web shell關閉防火牆功能以及開啟RDP</p><p><strong>Step 7:</strong> 在測試一次遠端桌面，成功進到Web Server。</p><p><strong>Step 8:</strong> 接著要使用procdump跟駭客工具minikatz來取得Web Server上跑的服務的使用者帳密。</p><p><strong>Step 9:</strong> 由於minikatz會被大部分防毒給擋掉，因此不能直接就把minikatz上傳到Web Server，因此這裡只上傳procdump。</p><p><strong>Step 10:</strong> procdump是合法的軟體，就是把process dump出來，因此在Web Server上執行沒問題，我們直接將proces資訊dump吃來，然後把Output傳到駭客的電腦。</p><p><strong>Step 11:</strong> 在駭客電腦執行minikatz分析process dump結果，成功發現kerberos帳號密碼以及服務IP(AD Server)。</p><p><strong>Step 12:</strong> 測試看看能不能直接透過網路芳鄰輸入IP位置跟帳號密碼連到AD Server的admin$目錄，發現可以成功到admin$目錄。</p><p><strong>Step 12:</strong> 將預寫好的勒鎖軟體上傳到Web Server，由於是透過winrar去加密程式，因此不怕防毒偵測。</p><p><strong>Step 13:</strong> 在Web Server執行勒鎖軟體，加密AD Server admin$資料夾。</p><p><strong>Step 14:</strong> 加密完成，AD Server服務已停止。</p><p><strong>學員扮演角色：IT人員:</strong></p><p><strong>Step 1:</strong> 發現AD Server被加密，要開始查找問題是怎麼發生的。</p><p><strong>Step 2:</strong> 連入趨勢科技的產品Apex Web GUI來查找問題。</p><p><strong>Step 3:</strong> 首先先隨便在AD Server找一個被加密的檔案名稱，然後透過檔案名稱去搜尋。</p><p><strong>Step 4:</strong> APEX找出這個檔案存在於哪一台主機(AD Server)，以及他的LOG，透過LOG可以看到他是被什麼Windows指令加密的(rar.exe -df <加密檔名> <原檔名稱> -p<加密的密碼>)還有是哪個使用者帳號執行的、從哪個檔案執行的以及執行時間，看到加密的密碼，網管人員可以松一口氣，表示至少可以還原檔案了。</加密的密碼></原檔名稱></加密檔名></p><p><strong>Step 5:</strong> APEX上可以使用LOG產出Root Cause Analysis(RCA)圖，類似關聯圖。關聯圖上面顯示跟那段指令有相關的檔案:</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre>PsExec.exe -&gt; encrypt.exe -&gt; cmd.exe -&gt; rar.exe -&gt; &lt;被加密的檔案&gt;
-</pre></table></code></div></div><p>從關聯圖可以看出，有人透過PsExec程式來從別台主機遠端在AD Server上執行encrypt.exe作加密的動作。</p><p><strong>Step 6:</strong> 接下來要找哪一台主機的log有encrypt.exe這個檔案的紀錄。一樣到APEX GUI透過檔名搜尋</p><p><strong>Step 7:</strong> 突然搜到除了AD Server以外，還有一台WEB Server一樣有執行這個檔案的紀錄(這個是執行紀錄，就算檔案刪掉也沒用，刪掉的指令也一樣完全都會被記錄進來)，另外還發現是WEB Server奇怪的帳號(剛剛駭客用webshell新增的使用者，一樣駭客刪掉使用者也沒有用，因為一舉一動都被記錄下來)執行encrypt.exe的。</p><p><strong>Step 8:</strong> 產出RCA圖，可以看到encrypt.exe的原檔名</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre>Explorer.exe -&gt; randsom.exe(原檔名) -&gt; PsExec.exe -&gt; encrypt.exe -&gt; cmd.exe -&gt; ...
-</pre></table></code></div></div><p>可以看到Explorer.exe執行randsom.exe，因此可以推斷WEB Server就是源頭也就是跳板機。</p><p><strong>Step 9:</strong> 回到APEX WEB GUI，以主機為單位，直接去叫出WEB Server上在這段期間執行所有的動作，因此駭客所做的每一步都直接顯示在頁面上(用webshell執行的所有動作)。</p><p><strong>Step 10:</strong> 結束。</p><p><strong>心得:</strong> APEX與前面keynote的原理一樣，一樣要在企業的所有機器裝Agent，這個Agent就是趨勢科技的防毒軟體，只是如果要採用agent收集功能，要加授權就可以，這個Agent一樣會去hook windows底層的API，所以每一步驟都完全被記錄下來，駭客要關掉Agent是非常困難的，Agent會用密碼加密，且可能會被設定為唯獨，因此可能不會受勒鎖軟體影響。這個agent會完全沒有隱私，但PC所有的一舉一動都會記錄下來，所以以前常聽到的駭客入侵後要清除足跡，在這種情況下幾乎是完全不管用的，因為就連『清除』這個動作也會被記錄起來。</p><h2 id="android-惡意程式動態解殼研究"><span class="mr-2">Android 惡意程式動態解殼研究</span><a href="#android-惡意程式動態解殼研究" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>一般來說Android開發者會對程式碼進行加殼，來防止反編譯。<li>加殼方法：<ul><li>混淆Code(缺點是標準API不能混淆)<li>Dex文件加密<li>Header修改<li>Dex data加密<li>Method動態加解密<li>VMP (Virtual Protect)</ul><li>有些開發者會先把code加密，然後故意把不重要的檔案做混淆，讓反編譯的人以為混淆的檔案就是code，然後花心力在處理混淆，殊不知真正的code被加密放在別的地方。</ul><h2 id="資訊安全中的人工智能對抗"><span class="mr-2">資訊安全中的人工智能對抗</span><a href="#資訊安全中的人工智能對抗" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>近年來大家很流行使用Machine Learning來training model去對資安攻擊做偵測，但是也衍伸了一種針對Machine Learning Model進行攻擊的「Adversarial Machine Learning」(AML)。<li>AML是去欺騙Model，使用混淆或是污染的方式來攻擊弄壞Model。例如：Model可以分出狗跟貓，但假如說駭客做一個像貓又像狗的照片(自然界不存在，也就是非正常的Data)，然後餵給Model，Model可能就會造成誤判。另外一種方式是圖片是狗，但是某一個pixel故意放烤麵包機，以人的肉眼來看看不出來，但是Model在判別時，就會造成錯誤，可能會誤判。<li>除圖像的以外，垃圾郵件的偵測也可以使用AML，例如在垃圾郵件裡面故意塞一段正常文字，Model可能就會以為這是正常的郵件。或是郵件裡面的某些文字故意換成同義詞，這樣可能也可以繞過垃圾郵件判別。<li>絕大部分的Model都不太可能百分之百不被騙或是混淆，如果一個Model完全不會被混淆，那個Model也沒有AML的價值。<li>AML攻擊手法可以分成兩種：<ul><li>Evasion Attack: 製作特製的data來騙或繞過Model，又可分成黑箱跟白箱，黑箱是駭客不知道Model長怎樣，只能不斷透過Output去猜測，白箱是指駭客已經事先了解Model規則。<li>Poision Attack: 去破壞Model，例如有些chat bot採用online traing機制，一邊聊天一邊學，但只要一直餵給他特定的data，就可以讓Model壞掉，學奇怪的東西或是誤判。</ul><li>防禦方式：<ul><li>Evasion Attack: 駭客一定要有方法去試Model Output，因此只要偵測是否有人在短時間內大量測試或是人工簡單看一下是否有不尋常非自然得data，如果有就BAN掉。<li>Model retrain：一但發現Model分析資料不準，就馬上修正Model並重新training。retrain又可分成主動式跟被動式，主動式是企業內部red/blue team主動去攻擊Model，然後修正Model。被動是等被攻擊了，才Retrain。</ul></ul><h2 id="駭客如何利用公開工具在內部網路中暢行無阻"><span class="mr-2">駭客如何利用公開工具在內部網路中暢行無阻</span><a href="#駭客如何利用公開工具在內部網路中暢行無阻" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>iThome報導 - <a href="https://www.ithome.com.tw/news/129486?fbclid=IwAR2rBpZx6r-fWXgmsTupgUrzkWsOiCunvCleq5oyfONtz6zyd3aQ1Zr1Abg">https://www.ithome.com.tw/news/129486?fbclid=IwAR2rBpZx6r-fWXgmsTupgUrzkWsOiCunvCleq5oyfONtz6zyd3aQ1Zr1Abg</a></p><ul><li>紅隊演練 vs 滲透測試<ul><li>紅隊演練：駭客思維出發、全面且廣泛、目的是竊取企業資料<li>滲透測試：在特定範圍、針對特定目標、目的是挖掘系統漏洞</ul><li>攻擊鍊:<div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre>目標偵查 -&gt; 武器研製 -&gt; 發動攻擊 -&gt; 維持控制 -&gt; 內網滲透 -&gt; 偷取資料
-</pre></table></code></div></div><li>目標偵查: Recon-Ng工具<li>武器研製: Metasploit(產生惡意巨集文件)<li>維持控制：安裝後門<li>內網滲透： BloodHound(能夠將AD Server網域內的元件以圖性化顯示並且提供攻擊路徑)、Responder(針對LLMNR或NBT-NS,MDNS謝進行poisoning attack)<li>偷取資料：dnscat2(DNS Tunnel)、icmpsh(ICMP Tunnel)。<li>防禦方對策<ul><li>研究公開工具，將其特徵加入資安產品<li>禁止不安全的巨集或是不常見的腳本運行(hta,vbs…)。<li>使用公開工具掃網路環境開啟服務並關閉未使用的功能。<li>檢視不安全的ACL配置<li>檢視DNS伺服器的解析方式</ul></ul><h1 id="321">3/21</h1><h2 id="keynotelive-demo工業控制-testbed-與資安攻防研究"><span class="mr-2">KEYNOTE【Live Demo】工業控制 Testbed 與資安攻防研究</span><a href="#keynotelive-demo工業控制-testbed-與資安攻防研究" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>近幾年工業製造的資安問題也慢慢開始被重視。<li>講者現場Demo一個模擬火車環境，駭客入侵鐵道管理系統，然後將火車引導到斷軌的地方。<li>攻擊手法為：<div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre>滲透至內網-&gt; 中間人攻擊 -&gt; 封包側錄或解析 -&gt; 串改封包或是發放假封包給控制端
-</pre></table></code></div></div><li>台灣工控設備有10546個暴露於網際網路(具有真實調查資料)，且大部分都是走HTTP協定，非常不安全，暴露的產業有能源業、大專院校、政府機關、停車場業者、鋼鐵製造業、飯店大夏管理等。<li>工業控制網路防護自我健康檢查<ol><li>資產盤點：<ul><li>是否已辨識關鍵基礎設施？<li>是否進行風險管理與評估？<li>使否檢視網段劃分與工業控制網路邊界？<li>是否檢視網路架構設計邏輯？</ul><li>ICS系統帳號管理：<ul><li>是否制定帳號鎖定、管理政策？<li>是否查找、刪除任何預設的特權帳號及密碼？<li>是否要求使用強密碼和多因素身份驗證？<li>是否限制特權帳號數量？尤其第三方供應商<li>是否要求OT場域人員定期更換密碼</ul><li>OT網路隔離性(ioslate)檢視<ul><li>是否可以直接由網際網路存取ICS？<li>是否可以直接由IT網路存取ICS?<li>是否有嚴謹之傘端存取管理政策？<li>防火牆是否已隔離所有需保護的ICS網路和設備。</ul></ol></ul><h2 id="keynote善用駭客思維如何聯合白帽駭客共同加強資安防禦能量"><span class="mr-2">KEYNOTE善用駭客思維：如何聯合白帽駭客共同加強資安防禦能量</span><a href="#keynote善用駭客思維如何聯合白帽駭客共同加強資安防禦能量" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>紅隊演練不應該事先告知，且紅隊會一直學習新的攻擊技術，增強攻擊能力，這樣可以考驗藍隊的應對處理機制。<li>企業產品安全保護方式(按照順序)：<ol><li>Code &amp; architecture review: 針對工程師或是員工上風險評估以及資訊安全概念的相關課程。工程師內部針對code去做review，看有沒有安全風險。<li>動＆靜態程式測試<li>紅隊演練：企業內部團隊找漏洞。<li>開啟Bug Bounty：讓全世界的白帽駭客一起來找漏洞。</ol><li>紅隊演練的好處：<ul><li>能夠讓企業了解產品的弱點及漏洞面向。<li>能夠讓藍隊增強企業安全的防守。<li>允許管理層衡量安全解決方案的投資。<li>能夠增加攻擊的成本，讓駭客攻擊更加困難。</ul></ul><h2 id="資安脫口秀"><span class="mr-2">資安脫口秀</span><a href="#資安脫口秀" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>甲方不應該看哪家廠商設備數字或成績漂亮就選擇他，應該是根據自身需要來選擇，可以整理近幾年公司遇到的資安事件，然後再跟乙方做討論，這樣才能選擇到公司可用的解決方案。</ul><h2 id="突破困境資安開源工具之應用分享"><span class="mr-2">突破困境：資安開源工具之應用分享</span><a href="#突破困境資安開源工具之應用分享" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>簡報 - <a href="https://www.slideshare.net/jasoncheng7115/20190321-137504140?fbclid=IwAR26IO1-XOw_0xPIX2jPZB859H2B9XC8Xt35WxO0EZVvx9yEW6ZL7TTYST8">https://www.slideshare.net/jasoncheng7115/20190321-137504140?fbclid=IwAR26IO1-XOw_0xPIX2jPZB859H2B9XC8Xt35WxO0EZVvx9yEW6ZL7TTYST8</a></ul><div class="table-wrapper"><table><thead><tr><th>開源工具<th>解決方案<tbody><tr><td>Proxmox<td>開源伺服器虛擬化管理平台<tr><td>LibreNMS<td>開源裝置與服務狀態監視<tr><td>Open-audIT<td>開源IT資產管理系統<tr><td>Graylog<td>開源事件記錄管理與分析<tr><td>FreeNAS<td>開源儲存伺服器系統<tr><td>Duplicati<td>開源資料備份系統<tr><td>PacketFence<td>開源網路存取控制系統<tr><td>WSO2 IoT<td>開源行動裝置管理(MDM BYOD管理)<tr><td>OpenVAS<td>開源弱點檢測管理平台<tr><td>MobSF<td>開源APP安全測試平台<tr><td>SonarQube<td>開源程式碼檢測平台<tr><td>Proxmox MG<td>開源郵件閘道伺服器</table></div><ul><li>開源套件選擇要點<ul><li>版本更新: 可以查看更新日期<li>活躍程度：可以知道這個專案到底有沒有在維護<li>商業支援：是否有付費版跟開源版，通常有付費版撐腰的比較好。<li>留意授權問題(GPL,BSD, Apache…)</ul><li>Open Hub - 開源專案安全檢測與授權建議</ul><h2 id="解密-https-雲端服務的美麗與哀愁-側錄--備份--防毒--稽核"><span class="mr-2">解密 HTTPS 雲端服務的美麗與哀愁: 側錄 / 備份 / 防毒 / 稽核</span><a href="#解密-https-雲端服務的美麗與哀愁-側錄--備份--防毒--稽核" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li>TLS提供了實質性的好處，但是卻也增加了分析流量的困難。<li>部分國家是禁止對HTTPS做解密，因為會有隱私權問題。<li>通常金融業是不能對HTTPS做解密，因為資料過度敏感。<li>有些軟體例如Line或是Messenger，沒辦法做解密，因為這些程式只要發現憑證被改就會被擋掉。</ul><p><strong>心得:</strong> 大部分的HTTPS解密都是透過proxy來做到，client端裝agent來換掉憑證，然後proxy端做解密的動作，接著再由proxy去跟Web Server去做連線，這樣就可以取得HTTPS的內容。</p><h1 id="廠商只有部分">廠商(只有部分)</h1><p><strong>郵件過濾及郵件安全：</strong></p><ul><li>Proofpoint</ul><p><strong>郵件伺服器及郵件安全</strong></p><ul><li>Openfind</ul><p><strong>特權帳號監控管理</strong></p><ul><li>Cyberark</ul><p><strong>HTTPS流量管理監控(解密HTTPS)</strong></p><ul><li>L7Ntwork<li>F5</ul><p><strong>雲端安全</strong></p><ul><li>Tufin<li>F-Secure</ul><p><strong>透過DNS來防護</strong></p><ul><li>Cisco Umbrella</ul><p><strong>端點檔案加密(為重要檔案加密)</strong></p><ul><li>中華電信SecurBox</ul><p><strong>DDoS防護</strong></p><ul><li>威睿科技 GenieATM(透過設備將流量導到F5那些去做清洗，他們只做導向的動作而已)<li>Arbor<li>Akamai</ul><p><strong>Log管理</strong></p><ul><li>ALog</ul><p><strong>整合型安全風險管理平台</strong></p><ul><li>tenable<li>IBM Security</ul><p><strong>Birdman新創公司</strong></p><ul><li>CYCARRIER</ul><h1 id="其餘學習">其餘學習</h1><ol><li>以往對付DDoS，廠商都是直接放一台自家設備在Gateway，當攻擊發生時設備將流量導向到Cloud Scrubbing Center去做清洗，但是這樣子對Client端還是有很大得負擔，因此發現今年許多處理DDoS的廠商，在Redirect的部分改用了BGP forwarding或是DNS Forwarding，直接在源頭就將流量導向到Scrubbing Center，這樣就不會增加Client的負擔。<li>市面上大部分的IP Cam都是換湯不換藥，外殼是自己設計，但是晶片可能就採用大陸晶片，這種認證通常都很脆弱，只要使用一些現有的APP就可以掃到IP cam然後免認證登入，因此在買IP cam的時候，最好選擇有通過『 IP Camera 場域實驗室』認證的IP Cam。<li>電影裡騙過管理者IP CAM畫面現實是做得到的，只要透過arp spoofing先去欺騙IP CAM管理器，這樣管理器就會以為駭客的電腦才是IP CAM，然後駭客再送假訊號(畫面正常的影片)給管理器，這樣管理器那邊就會一直看到是正常的畫面。</ol><blockquote class="prompt-info"><div><p>文章內容的轉載、重製、發佈，請註明出處: <a href="https://pohsienshih.github.io">https://pohsienshih.github.io</a></p></div></blockquote></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/security/'>Security</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/conference/" class="post-tag no-text-decoration" >conference</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=2019 iThome資安大會筆記 - Po-Hsien Workspace&amp;url=https://blog.phshih.com/blog/2019-ithome-cyber-sec-notes/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=2019 iThome資安大會筆記 - Po-Hsien Workspace&amp;u=https://blog.phshih.com/blog/2019-ithome-cyber-sec-notes/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://blog.phshih.com/blog/2019-ithome-cyber-sec-notes/&amp;text=2019 iThome資安大會筆記 - Po-Hsien Workspace" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">Recently Updated</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/blog/mariadb-master-slave-replication-with-maxscale/">MariaDB Master-Slave Replication with MaxScale</a></ul></div><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/kubernetes/">kubernetes</a> <a class="post-tag" href="/tags/personal/">Personal</a> <a class="post-tag" href="/tags/conference/">conference</a> <a class="post-tag" href="/tags/high-availability/">high availability</a> <a class="post-tag" href="/tags/pks/">pks</a> <a class="post-tag" href="/tags/testing/">testing</a> <a class="post-tag" href="/tags/activemq/">activemq</a> <a class="post-tag" href="/tags/elk/">ELK</a> <a class="post-tag" href="/tags/log/">log</a> <a class="post-tag" href="/tags/mariadb/">mariadb</a></div></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">Contents</div><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/blog/2019-ithome-kubernetes-summit-notes/"><div class="card-body"> <em class="timeago small" data-ts="1568668318" > 2019-09-16 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>iThome Kubernetes Summit 2019 心得</h3><div class="text-muted small"><p> 這次是第一次參加iThome Kubernetes Summit，當初看到早鳥票釋出就直接買了($2400左右)，以一天的Conference來說不算便宜，但是能夠去學習學習增廣見聞也是值得的。 結果買票之後才得知我們社群Cloud Native Taiwan User Group(CNTUG)也有去擺攤，雖然是付費票，但是還是去支援了一下社群攤位xD。 上午場都在跟附近社群交流、逛攤位...</p></div></div></a></div><div class="card"> <a href="/blog/activemq5-shared-file-system-master-slave/"><div class="card-body"> <em class="timeago small" data-ts="1650582898" > 2022-04-21 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>ActiveMQ 5 Shared File System Master Slave</h3><div class="text-muted small"><p> ActiveMQ 5 在 High Availability (HA) 上分成兩種角色: master 和 slave ，類似 Active-Standby mode。在一般情況只會有 master 處理 Request，slave 待命，只有當 master 異常時，slave 才會接手這些動作。 一般 ActiveMQ 都是把資料存在記憶體裡面，但是當 Broker 掛掉後，記憶體裡存...</p></div></div></a></div><div class="card"> <a href="/blog/mariadb-master-slave-replication-with-maxscale/"><div class="card-body"> <em class="timeago small" data-ts="1646483061" > 2022-03-05 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>MariaDB Master-Slave Replication with MaxScale</h3><div class="text-muted small"><p> 最近因工作關係剛好研究到 MariaDB High Availability (HA) 機制，因此本篇整理一下 MariaDB Master-Slave Replication 的相關筆記。 在一個系統環境裡，資料庫通常扮演著很重要的角色，主要負責存放系統的一些紀錄或是使用者的資料，因此資料庫的備援/高可用性 (High Availability)以及負載平衡 (Load Balancin...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/blog/ssh-tunnel-introduction/" class="btn btn-outline-primary" prompt="Older"><p>SSH Tunnel介紹</p></a> <a href="/blog/enterprise-pks-introduction/" class="btn btn-outline-primary" prompt="Newer"><p>Enterprise PKS介紹</p></a></div></div></div></div><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted"><div class="footer-left"><p class="mb-0"> © 2022 <a href="https://github.com/username">Po-Hsien Shih</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/kubernetes/">kubernetes</a> <a class="post-tag" href="/tags/personal/">Personal</a> <a class="post-tag" href="/tags/conference/">conference</a> <a class="post-tag" href="/tags/high-availability/">high availability</a> <a class="post-tag" href="/tags/pks/">pks</a> <a class="post-tag" href="/tags/testing/">testing</a> <a class="post-tag" href="/tags/activemq/">activemq</a> <a class="post-tag" href="/tags/elk/">ELK</a> <a class="post-tag" href="/tags/log/">log</a> <a class="post-tag" href="/tags/mariadb/">mariadb</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script> <script defer src="https://www.googletagmanager.com/gtag/js?id=G-SZFTFH1NJD"></script> <script> document.addEventListener("DOMContentLoaded", function(event) { window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-SZFTFH1NJD'); }); </script>
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en"
+  
+>
+
+  <!--
+  The Head
+-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  
+  <meta name="keywords" content="2019, ithome, security, 資安大會, cybersec">
+  
+  <!-- Allow having a localized datetime different from the appearance language -->
+  
+
+  
+
+    
+
+    
+
+  
+
+  
+
+  
+
+  
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="2019 iThome資安大會筆記" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="2019,ithome,security,資安大會,cybersec" />
+<meta property="og:description" content="2019,ithome,security,資安大會,cybersec" />
+<link rel="canonical" href="http://0.0.0.0:4000/blog/2019-ithome-cyber-sec-notes/" />
+<meta property="og:url" content="http://0.0.0.0:4000/blog/2019-ithome-cyber-sec-notes/" />
+<meta property="og:site_name" content="Po-Hsien Workspace" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-05-26T23:17:07+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="2019 iThome資安大會筆記" />
+<meta name="twitter:site" content="@twitter_username" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2019-05-26T23:17:07+00:00","datePublished":"2019-05-26T23:17:07+00:00","description":"2019,ithome,security,資安大會,cybersec","headline":"2019 iThome資安大會筆記","mainEntityOfPage":{"@type":"WebPage","@id":"http://0.0.0.0:4000/blog/2019-ithome-cyber-sec-notes/"},"url":"http://0.0.0.0:4000/blog/2019-ithome-cyber-sec-notes/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  
+
+  <title>2019 iThome資安大會筆記 | Po-Hsien Workspace
+  </title>
+
+  <!--
+  The Favicons for Web, Android, Microsoft, and iOS (iPhone and iPad) Apps
+  Generated by: https://realfavicongenerator.net/
+-->
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
+<link rel="manifest" href="/assets/img/favicons/site.webmanifest">
+<link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Po-Hsien Workspace">
+<meta name="application-name" content="Po-Hsien Workspace">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+  
+
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://cdn.jsdelivr.net" >
+      <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" >
+    
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
+
+  
+
+  <!-- GA -->
+  
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+  
+
+  
+    <!-- Manific Popup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css">
+  
+
+  <!-- JavaScript -->
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+
+  
+    <!--
+  Switch the mode between dark and light.
+-->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() { return "mode"; }
+    static get MODE_ATTR() { return "data-mode"; }
+    static get DARK_MODE() { return "dark"; }
+    static get LIGHT_MODE() { return "light"; }
+    static get ID() { return "mode-toggle"; }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener("change", () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+
+      });
+
+    } /* constructor() */
+
+    get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
+
+    get isSysDarkPrefer() { return this.sysDarkPrefers.matches; }
+
+    get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; }
+
+    get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; }
+
+    get hasMode() { return this.mode != null; }
+
+    get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode
+        || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      $('html').removeAttr(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage({
+        direction: ModeToggle.ID,
+        message: this.modeStatus
+      }, "*");
+    }
+
+  } /* ModeToggle */
+
+  const toggle = new ModeToggle();
+
+  function flipMode() {
+    if (toggle.hasMode) {
+      if (toggle.isSysDarkPrefer) {
+        if (toggle.isLightMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setLight();
+        }
+
+      } else {
+        if (toggle.isDarkMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setDark();
+        }
+      }
+
+    } else {
+      if (toggle.isSysDarkPrefer) {
+        toggle.setLight();
+      } else {
+        toggle.setDark();
+      }
+    }
+
+    toggle.notify();
+
+  } /* flipMode() */
+
+</script>
+
+  
+</head>
+
+
+  
+    <!--
+  Switch the mode between dark and light.
+-->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() { return "mode"; }
+    static get MODE_ATTR() { return "data-mode"; }
+    static get DARK_MODE() { return "dark"; }
+    static get LIGHT_MODE() { return "light"; }
+    static get ID() { return "mode-toggle"; }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener("change", () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+
+      });
+
+    } /* constructor() */
+
+    get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
+
+    get isSysDarkPrefer() { return this.sysDarkPrefers.matches; }
+
+    get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; }
+
+    get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; }
+
+    get hasMode() { return this.mode != null; }
+
+    get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode
+        || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      $('html').removeAttr(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage({
+        direction: ModeToggle.ID,
+        message: this.modeStatus
+      }, "*");
+    }
+
+  } /* ModeToggle */
+
+  const toggle = new ModeToggle();
+
+  function flipMode() {
+    if (toggle.hasMode) {
+      if (toggle.isSysDarkPrefer) {
+        if (toggle.isLightMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setLight();
+        }
+
+      } else {
+        if (toggle.isDarkMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setDark();
+        }
+      }
+
+    } else {
+      if (toggle.isSysDarkPrefer) {
+        toggle.setLight();
+      } else {
+        toggle.setDark();
+      }
+    }
+
+    toggle.notify();
+
+  } /* flipMode() */
+
+</script>
+
+  
+
+  <body data-spy="scroll" data-target="#toc" data-topbar-visible="true">
+
+    <!--
+  The Side Bar
+-->
+
+<div id="sidebar" class="d-flex flex-column align-items-end">
+  <div class="profile-wrapper text-center">
+    <div id="avatar">
+      <a href="/" alt="avatar" class="mx-auto">
+        
+          
+          <img src="
+            
+              /assets/images/pohsien.jpg
+            
+          " alt="avatar" onerror="this.style.display='none'">
+        
+      </a>
+    </div>
+
+    <div class="site-title mt-3">
+      <a href="/">Po-Hsien Workspace</a>
+    </div>
+    <div class="site-subtitle font-italic">Cloud Native, Containerization, Virtualization, Linux Technologies.</div>
+
+  </div><!-- .profile-wrapper -->
+
+  <ul class="w-100">
+
+    <!-- home -->
+    <li class="nav-item">
+      <a href="/" class="nav-link">
+        <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i>
+        <span>HOME</span>
+      </a>
+    </li>
+    <!-- the real tabs -->
+    
+    <li class="nav-item">
+      <a href="/categories/" class="nav-link">
+        <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>CATEGORIES</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/tags/" class="nav-link">
+        <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>TAGS</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/archives/" class="nav-link">
+        <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>ARCHIVES</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/about/" class="nav-link">
+        <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>ABOUT</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+
+  </ul> <!-- ul.nav.flex-column -->
+
+  <div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center">
+
+    
+      <button class="mode-toggle btn" aria-label="Switch Mode">
+        <i class="fas fa-adjust"></i>
+      </button>
+
+      
+        <span class="icon-border"></span>
+      
+    
+
+    
+      
+
+      
+      <a href="https://github.com/pohsien324" aria-label="github"
+        target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="
+          javascript:location.href = 'mailto:' + ['pohsien324','gmail.com'].join('@')" aria-label="email"
+        >
+        <i class="fas fa-envelope"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="https://www.linkedin.com/in/po-hsien-shih-23bbb1162/" aria-label="linkedin"
+        target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="/feed.xml" aria-label="rss"
+        >
+        <i class="fas fa-rss"></i>
+      </a>
+      
+
+    
+
+  </div> <!-- .sidebar-bottom -->
+
+</div><!-- #sidebar -->
+
+
+    <!--
+  The Top Bar
+-->
+
+<div id="topbar-wrapper" class="row justify-content-center">
+  <div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between">
+    <span id="breadcrumb">
+
+    
+
+    
+
+      
+
+        
+          <span>
+            <a href="/">
+              Home
+            </a>
+          </span>
+
+        
+
+      
+
+        
+
+      
+
+        
+
+          
+            <span>2019 iThome資安大會筆記</span>
+          
+
+        
+
+      
+
+    
+
+    </span><!-- endof #breadcrumb -->
+
+    <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i>
+
+    <div id="topbar-title">
+      Post
+    </div>
+
+    <i id="search-trigger" class="fas fa-search fa-fw"></i>
+    <span id="search-wrapper" class="align-items-center">
+      <i class="fas fa-search fa-fw"></i>
+      <input class="form-control" id="search-input" type="search"
+        aria-label="search" autocomplete="off" placeholder="Search...">
+    </span>
+    <span id="search-cancel" >Cancel</span>
+  </div>
+
+</div>
+
+
+    <div id="main-wrapper">
+      <div id="main">
+
+        
+
+
+
+
+
+
+
+
+
+<div class="row">
+
+  <!-- core -->
+  <div id="core-wrapper" class="col-12 col-lg-11 col-xl-8">
+    <div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+    
+
+    
+      
+      
+        <!--
+  Refactor the HTML structure.
+-->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Add attribute 'hide-bullet' to the checkbox list -->
+
+
+
+<!-- images -->
+
+
+
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+
+    
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+
+
+
+<!-- Wrap prompt element of blockquote with the <div> tag -->
+
+
+
+
+
+
+
+  
+  
+
+  
+
+    
+      
+      
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+  
+
+
+
+<!-- return -->
+
+
+
+
+
+
+
+<h1 data-toc-skip>2019 iThome資安大會筆記</h1>
+
+<div class="post-meta text-muted">
+
+  <!-- author -->
+  <div>
+    
+    
+
+    
+
+    By
+    <em>
+      
+        <a href="https://github.com/username">Po-Hsien Shih</a>
+      
+    </em>
+  </div>
+
+  <div class="d-flex">
+    <div>
+      <!-- published date -->
+      <span>
+        Posted
+        <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago"
+    data-ts="1558912627"
+    
+      data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"
+    
+    >
+  2019-05-26
+</em>
+
+      </span>
+
+      <!-- lastmod date -->
+      
+
+      <!-- read time -->
+      <!--
+  Calculate the post's reading time, and display the word count in tooltip
+ -->
+
+
+
+<!-- words per minute  -->
+
+
+
+
+
+
+
+
+
+
+<!-- return element -->
+<span class="readtime" data-toggle="tooltip" data-placement="bottom"
+  title="4841 words">
+  <em>26 min</em> read</span>
+
+
+      <!-- page views -->
+      
+    </div>
+
+  </div> <!-- .d-flex -->
+
+</div> <!-- .post-meta -->
+
+<div class="post-content">
+  <p>這篇主要是補上今年3月份參加iThome資安大會的一些筆記跟小小心得。今年的資安大會與往年一樣都在台北國際會議中心舉辦，不過由於我第一天有事情，因此今年只有參加到後面兩天，挺可惜的，不過後面兩天也蠻多精彩的演講(雖然大部分還是推銷產品居多)，以下就是我的一些小小筆記，如果想暸解更細部的話，目前簡報已經都釋出在官網上了，可以去參考～</p>
+
+<p>議程: <a href="https://cyber.ithome.com.tw/agenda">https://cyber.ithome.com.tw/agenda</a>
+<!--more--></p>
+<h1 id="320">3/20</h1>
+
+<h2 id="keynote-正面迎戰內部威脅公司被害還是員工被駭"><span class="mr-2">Keynote 正面迎戰內部威脅，公司被害還是員工被駭?!</span><a href="#keynote-正面迎戰內部威脅公司被害還是員工被駭" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>「研發部門是企業命脈，卻最難管理」，鎖太多權限可能導致開發人員沒辦法安裝套件或是一些撰寫的一些程式功能無法執行，但是開發人員有可能會藉由一些方式(如IDE)，使用看起來合法的操作來將企業資料攜出。</li>
+  <li>為了避免這樣，精品科技開發的產品能夠讓IT人員針對特定IDE去所權限，例如可以設定visual code所執行的CMD沒辦法用來上網或是沒辦法執行敏感指令(copy &amp; paste)，正常情況下的CMD沒事，但是只要是從IDE叫出來的CMD就鎖權限。另外也可擋掉IDE上面的code在執行某些敏感的動作。</li>
+  <li>除了IDE以外，另外也可以限制如Office這種軟體，權限可以設定的很彈性，例如可以設定只能把文字從外部複製貼上到Word，但是不能從Word把資料複製出來等。</li>
+  <li>原理推測是透過在端點執行Agent直接去對Windows底層的API去做阻擋，因為不管什麼操作都還是要靠Windows 底層的API來完成，因此直接去鎖底層就可以達到這樣的管理。</li>
+</ul>
+
+<h2 id="cyberlab-趨勢科技-target-ransom"><span class="mr-2">Cyberlab 趨勢科技 Target ransom</span><a href="#cyberlab-趨勢科技-target-ransom" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>實機課程，由於禁止將講義跟參考資料帶出，因此只能簡單概述實機內容。</li>
+  <li>現在勒鎖軟體已經不一定要使用一些非法的程式，許多駭客已經開始使用「正當合法軟體」來作加密的動作(如winrar)，這樣可以避免防毒的偵測。</li>
+  <li>一般企業中勒鎖病毒都以為只要把中的那台還原或是把資料從備份倒回來就好，但是這樣治標不治本，因為駭客還是存在公司裡，也許他是透過內網裡某台跳板機來攻擊目標，但往往IT人員都只會把焦點放在被攻擊的目標上，以為是那台被駭。要如何追查APT攻擊怎麼造成的對於IT人員來說是非常的困難，透過趨勢科技的APEX產品，就可以幫助IT人員方便的查找問題。</li>
+  <li>實機操作就是試著扮演駭客透過跳板機去打下AD Server，然後再試著扮演網管人員去追查攻擊流程。</li>
+</ul>
+
+<p><strong>學員扮演角色：駭客:</strong></p>
+
+<p><strong>Step 1:</strong> 首先連到企業的一個網站</p>
+
+<p><strong>Step 2:</strong> 透過聯絡我們上傳照片功能，上傳Webshell到網站。</p>
+
+<p><strong>Step 3:</strong> 直接在網站上執行Webshell，新增一個使用者並提權為管理者，然後了解一下Web Server相關資訊(hostname、Web server version…)</p>
+
+<p><strong>Step 4:</strong> 發現Web Server是Windows Server IIS。</p>
+
+<p><strong>Step 5:</strong> 嘗試能不能遠端桌面，不能，可能是防火牆擋住或是沒開RDP功能。</p>
+
+<p><strong>Step 6:</strong> 透過Web shell關閉防火牆功能以及開啟RDP</p>
+
+<p><strong>Step 7:</strong> 在測試一次遠端桌面，成功進到Web Server。</p>
+
+<p><strong>Step 8:</strong> 接著要使用procdump跟駭客工具minikatz來取得Web Server上跑的服務的使用者帳密。</p>
+
+<p><strong>Step 9:</strong> 由於minikatz會被大部分防毒給擋掉，因此不能直接就把minikatz上傳到Web Server，因此這裡只上傳procdump。</p>
+
+<p><strong>Step 10:</strong> procdump是合法的軟體，就是把process dump出來，因此在Web Server上執行沒問題，我們直接將proces資訊dump吃來，然後把Output傳到駭客的電腦。</p>
+
+<p><strong>Step 11:</strong> 在駭客電腦執行minikatz分析process dump結果，成功發現kerberos帳號密碼以及服務IP(AD Server)。</p>
+
+<p><strong>Step 12:</strong> 測試看看能不能直接透過網路芳鄰輸入IP位置跟帳號密碼連到AD Server的admin$目錄，發現可以成功到admin$目錄。</p>
+
+<p><strong>Step 12:</strong> 將預寫好的勒鎖軟體上傳到Web Server，由於是透過winrar去加密程式，因此不怕防毒偵測。</p>
+
+<p><strong>Step 13:</strong> 在Web Server執行勒鎖軟體，加密AD Server admin$資料夾。</p>
+
+<p><strong>Step 14:</strong> 加密完成，AD Server服務已停止。</p>
+
+<p><strong>學員扮演角色：IT人員:</strong></p>
+
+<p><strong>Step 1:</strong> 發現AD Server被加密，要開始查找問題是怎麼發生的。</p>
+
+<p><strong>Step 2:</strong> 連入趨勢科技的產品Apex Web GUI來查找問題。</p>
+
+<p><strong>Step 3:</strong> 首先先隨便在AD Server找一個被加密的檔案名稱，然後透過檔案名稱去搜尋。</p>
+
+<p><strong>Step 4:</strong> APEX找出這個檔案存在於哪一台主機(AD Server)，以及他的LOG，透過LOG可以看到他是被什麼Windows指令加密的(rar.exe -df <加密檔名> <原檔名稱> -p<加密的密碼>)還有是哪個使用者帳號執行的、從哪個檔案執行的以及執行時間，看到加密的密碼，網管人員可以松一口氣，表示至少可以還原檔案了。</加密的密碼></原檔名稱></加密檔名></p>
+
+<p><strong>Step 5:</strong> APEX上可以使用LOG產出Root Cause Analysis(RCA)圖，類似關聯圖。關聯圖上面顯示跟那段指令有相關的檔案:</p>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>PsExec.exe -&gt; encrypt.exe -&gt; cmd.exe -&gt; rar.exe -&gt; &lt;被加密的檔案&gt;
+</pre></td></tr></tbody></table></code></div></div>
+<p>從關聯圖可以看出，有人透過PsExec程式來從別台主機遠端在AD Server上執行encrypt.exe作加密的動作。</p>
+
+<p><strong>Step 6:</strong> 接下來要找哪一台主機的log有encrypt.exe這個檔案的紀錄。一樣到APEX GUI透過檔名搜尋</p>
+
+<p><strong>Step 7:</strong> 突然搜到除了AD Server以外，還有一台WEB Server一樣有執行這個檔案的紀錄(這個是執行紀錄，就算檔案刪掉也沒用，刪掉的指令也一樣完全都會被記錄進來)，另外還發現是WEB Server奇怪的帳號(剛剛駭客用webshell新增的使用者，一樣駭客刪掉使用者也沒有用，因為一舉一動都被記錄下來)執行encrypt.exe的。</p>
+
+<p><strong>Step 8:</strong> 產出RCA圖，可以看到encrypt.exe的原檔名</p>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>Explorer.exe -&gt; randsom.exe(原檔名) -&gt; PsExec.exe -&gt; encrypt.exe -&gt; cmd.exe -&gt; ...
+</pre></td></tr></tbody></table></code></div></div>
+<p>可以看到Explorer.exe執行randsom.exe，因此可以推斷WEB Server就是源頭也就是跳板機。</p>
+
+<p><strong>Step 9:</strong> 回到APEX WEB GUI，以主機為單位，直接去叫出WEB Server上在這段期間執行所有的動作，因此駭客所做的每一步都直接顯示在頁面上(用webshell執行的所有動作)。</p>
+
+<p><strong>Step 10:</strong> 結束。</p>
+
+<p><strong>心得:</strong>
+APEX與前面keynote的原理一樣，一樣要在企業的所有機器裝Agent，這個Agent就是趨勢科技的防毒軟體，只是如果要採用agent收集功能，要加授權就可以，這個Agent一樣會去hook windows底層的API，所以每一步驟都完全被記錄下來，駭客要關掉Agent是非常困難的，Agent會用密碼加密，且可能會被設定為唯獨，因此可能不會受勒鎖軟體影響。這個agent會完全沒有隱私，但PC所有的一舉一動都會記錄下來，所以以前常聽到的駭客入侵後要清除足跡，在這種情況下幾乎是完全不管用的，因為就連『清除』這個動作也會被記錄起來。</p>
+
+<h2 id="android-惡意程式動態解殼研究"><span class="mr-2">Android 惡意程式動態解殼研究</span><a href="#android-惡意程式動態解殼研究" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>一般來說Android開發者會對程式碼進行加殼，來防止反編譯。</li>
+  <li>加殼方法：
+    <ul>
+      <li>混淆Code(缺點是標準API不能混淆)</li>
+      <li>Dex文件加密</li>
+      <li>Header修改</li>
+      <li>Dex data加密</li>
+      <li>Method動態加解密</li>
+      <li>VMP (Virtual Protect)</li>
+    </ul>
+  </li>
+  <li>有些開發者會先把code加密，然後故意把不重要的檔案做混淆，讓反編譯的人以為混淆的檔案就是code，然後花心力在處理混淆，殊不知真正的code被加密放在別的地方。</li>
+</ul>
+
+<h2 id="資訊安全中的人工智能對抗"><span class="mr-2">資訊安全中的人工智能對抗</span><a href="#資訊安全中的人工智能對抗" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>近年來大家很流行使用Machine Learning來training model去對資安攻擊做偵測，但是也衍伸了一種針對Machine Learning Model進行攻擊的「Adversarial Machine Learning」(AML)。</li>
+  <li>AML是去欺騙Model，使用混淆或是污染的方式來攻擊弄壞Model。例如：Model可以分出狗跟貓，但假如說駭客做一個像貓又像狗的照片(自然界不存在，也就是非正常的Data)，然後餵給Model，Model可能就會造成誤判。另外一種方式是圖片是狗，但是某一個pixel故意放烤麵包機，以人的肉眼來看看不出來，但是Model在判別時，就會造成錯誤，可能會誤判。</li>
+  <li>除圖像的以外，垃圾郵件的偵測也可以使用AML，例如在垃圾郵件裡面故意塞一段正常文字，Model可能就會以為這是正常的郵件。或是郵件裡面的某些文字故意換成同義詞，這樣可能也可以繞過垃圾郵件判別。</li>
+  <li>絕大部分的Model都不太可能百分之百不被騙或是混淆，如果一個Model完全不會被混淆，那個Model也沒有AML的價值。</li>
+  <li>AML攻擊手法可以分成兩種：
+    <ul>
+      <li>Evasion Attack: 製作特製的data來騙或繞過Model，又可分成黑箱跟白箱，黑箱是駭客不知道Model長怎樣，只能不斷透過Output去猜測，白箱是指駭客已經事先了解Model規則。</li>
+      <li>Poision Attack: 去破壞Model，例如有些chat bot採用online traing機制，一邊聊天一邊學，但只要一直餵給他特定的data，就可以讓Model壞掉，學奇怪的東西或是誤判。</li>
+    </ul>
+  </li>
+  <li>防禦方式：
+    <ul>
+      <li>Evasion Attack: 駭客一定要有方法去試Model Output，因此只要偵測是否有人在短時間內大量測試或是人工簡單看一下是否有不尋常非自然得data，如果有就BAN掉。</li>
+      <li>Model retrain：一但發現Model分析資料不準，就馬上修正Model並重新training。retrain又可分成主動式跟被動式，主動式是企業內部red/blue team主動去攻擊Model，然後修正Model。被動是等被攻擊了，才Retrain。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="駭客如何利用公開工具在內部網路中暢行無阻"><span class="mr-2">駭客如何利用公開工具在內部網路中暢行無阻</span><a href="#駭客如何利用公開工具在內部網路中暢行無阻" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<p>iThome報導 - 
+<a href="https://www.ithome.com.tw/news/129486?fbclid=IwAR2rBpZx6r-fWXgmsTupgUrzkWsOiCunvCleq5oyfONtz6zyd3aQ1Zr1Abg">https://www.ithome.com.tw/news/129486?fbclid=IwAR2rBpZx6r-fWXgmsTupgUrzkWsOiCunvCleq5oyfONtz6zyd3aQ1Zr1Abg</a></p>
+<ul>
+  <li>紅隊演練 vs 滲透測試
+    <ul>
+      <li>紅隊演練：駭客思維出發、全面且廣泛、目的是竊取企業資料</li>
+      <li>滲透測試：在特定範圍、針對特定目標、目的是挖掘系統漏洞</li>
+    </ul>
+  </li>
+  <li>攻擊鍊:
+    <div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>目標偵查 -&gt; 武器研製 -&gt; 發動攻擊 -&gt; 維持控制 -&gt; 內網滲透 -&gt; 偷取資料
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>目標偵查: Recon-Ng工具</li>
+  <li>武器研製: Metasploit(產生惡意巨集文件)</li>
+  <li>維持控制：安裝後門</li>
+  <li>內網滲透： BloodHound(能夠將AD Server網域內的元件以圖性化顯示並且提供攻擊路徑)、Responder(針對LLMNR或NBT-NS,MDNS謝進行poisoning attack)</li>
+  <li>偷取資料：dnscat2(DNS Tunnel)、icmpsh(ICMP Tunnel)。</li>
+  <li>防禦方對策
+    <ul>
+      <li>研究公開工具，將其特徵加入資安產品</li>
+      <li>禁止不安全的巨集或是不常見的腳本運行(hta,vbs…)。</li>
+      <li>使用公開工具掃網路環境開啟服務並關閉未使用的功能。</li>
+      <li>檢視不安全的ACL配置</li>
+      <li>檢視DNS伺服器的解析方式</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="321">3/21</h1>
+<h2 id="keynotelive-demo工業控制-testbed-與資安攻防研究"><span class="mr-2">KEYNOTE【Live Demo】工業控制 Testbed 與資安攻防研究</span><a href="#keynotelive-demo工業控制-testbed-與資安攻防研究" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>近幾年工業製造的資安問題也慢慢開始被重視。</li>
+  <li>講者現場Demo一個模擬火車環境，駭客入侵鐵道管理系統，然後將火車引導到斷軌的地方。</li>
+  <li>攻擊手法為：
+    <div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>滲透至內網-&gt; 中間人攻擊 -&gt; 封包側錄或解析 -&gt; 串改封包或是發放假封包給控制端
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>台灣工控設備有10546個暴露於網際網路(具有真實調查資料)，且大部分都是走HTTP協定，非常不安全，暴露的產業有能源業、大專院校、政府機關、停車場業者、鋼鐵製造業、飯店大夏管理等。</li>
+  <li>工業控制網路防護自我健康檢查
+    <ol>
+      <li>資產盤點：
+        <ul>
+          <li>是否已辨識關鍵基礎設施？</li>
+          <li>是否進行風險管理與評估？</li>
+          <li>使否檢視網段劃分與工業控制網路邊界？</li>
+          <li>是否檢視網路架構設計邏輯？</li>
+        </ul>
+      </li>
+      <li>ICS系統帳號管理：
+        <ul>
+          <li>是否制定帳號鎖定、管理政策？</li>
+          <li>是否查找、刪除任何預設的特權帳號及密碼？</li>
+          <li>是否要求使用強密碼和多因素身份驗證？</li>
+          <li>是否限制特權帳號數量？尤其第三方供應商</li>
+          <li>是否要求OT場域人員定期更換密碼</li>
+        </ul>
+      </li>
+      <li>OT網路隔離性(ioslate)檢視
+        <ul>
+          <li>是否可以直接由網際網路存取ICS？</li>
+          <li>是否可以直接由IT網路存取ICS?</li>
+          <li>是否有嚴謹之傘端存取管理政策？</li>
+          <li>防火牆是否已隔離所有需保護的ICS網路和設備。</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="keynote善用駭客思維如何聯合白帽駭客共同加強資安防禦能量"><span class="mr-2">KEYNOTE善用駭客思維：如何聯合白帽駭客共同加強資安防禦能量</span><a href="#keynote善用駭客思維如何聯合白帽駭客共同加強資安防禦能量" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>紅隊演練不應該事先告知，且紅隊會一直學習新的攻擊技術，增強攻擊能力，這樣可以考驗藍隊的應對處理機制。</li>
+  <li>企業產品安全保護方式(按照順序)：
+    <ol>
+      <li>Code &amp; architecture review: 針對工程師或是員工上風險評估以及資訊安全概念的相關課程。工程師內部針對code去做review，看有沒有安全風險。</li>
+      <li>動＆靜態程式測試</li>
+      <li>紅隊演練：企業內部團隊找漏洞。</li>
+      <li>開啟Bug Bounty：讓全世界的白帽駭客一起來找漏洞。</li>
+    </ol>
+  </li>
+  <li>紅隊演練的好處：
+    <ul>
+      <li>能夠讓企業了解產品的弱點及漏洞面向。</li>
+      <li>能夠讓藍隊增強企業安全的防守。</li>
+      <li>允許管理層衡量安全解決方案的投資。</li>
+      <li>能夠增加攻擊的成本，讓駭客攻擊更加困難。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="資安脫口秀"><span class="mr-2">資安脫口秀</span><a href="#資安脫口秀" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>甲方不應該看哪家廠商設備數字或成績漂亮就選擇他，應該是根據自身需要來選擇，可以整理近幾年公司遇到的資安事件，然後再跟乙方做討論，這樣才能選擇到公司可用的解決方案。</li>
+</ul>
+
+<h2 id="突破困境資安開源工具之應用分享"><span class="mr-2">突破困境：資安開源工具之應用分享</span><a href="#突破困境資安開源工具之應用分享" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>簡報 - 
+<a href="https://www.slideshare.net/jasoncheng7115/20190321-137504140?fbclid=IwAR26IO1-XOw_0xPIX2jPZB859H2B9XC8Xt35WxO0EZVvx9yEW6ZL7TTYST8">https://www.slideshare.net/jasoncheng7115/20190321-137504140?fbclid=IwAR26IO1-XOw_0xPIX2jPZB859H2B9XC8Xt35WxO0EZVvx9yEW6ZL7TTYST8</a></li>
+</ul>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>開源工具</th>
+      <th>解決方案</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Proxmox</td>
+      <td>開源伺服器虛擬化管理平台</td>
+    </tr>
+    <tr>
+      <td>LibreNMS</td>
+      <td>開源裝置與服務狀態監視</td>
+    </tr>
+    <tr>
+      <td>Open-audIT</td>
+      <td>開源IT資產管理系統</td>
+    </tr>
+    <tr>
+      <td>Graylog</td>
+      <td>開源事件記錄管理與分析</td>
+    </tr>
+    <tr>
+      <td>FreeNAS</td>
+      <td>開源儲存伺服器系統</td>
+    </tr>
+    <tr>
+      <td>Duplicati</td>
+      <td>開源資料備份系統</td>
+    </tr>
+    <tr>
+      <td>PacketFence</td>
+      <td>開源網路存取控制系統</td>
+    </tr>
+    <tr>
+      <td>WSO2 IoT</td>
+      <td>開源行動裝置管理(MDM BYOD管理)</td>
+    </tr>
+    <tr>
+      <td>OpenVAS</td>
+      <td>開源弱點檢測管理平台</td>
+    </tr>
+    <tr>
+      <td>MobSF</td>
+      <td>開源APP安全測試平台</td>
+    </tr>
+    <tr>
+      <td>SonarQube</td>
+      <td>開源程式碼檢測平台</td>
+    </tr>
+    <tr>
+      <td>Proxmox MG</td>
+      <td>開源郵件閘道伺服器</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<ul>
+  <li>開源套件選擇要點
+    <ul>
+      <li>版本更新: 可以查看更新日期</li>
+      <li>活躍程度：可以知道這個專案到底有沒有在維護</li>
+      <li>商業支援：是否有付費版跟開源版，通常有付費版撐腰的比較好。</li>
+      <li>留意授權問題(GPL,BSD, Apache…)</li>
+    </ul>
+  </li>
+  <li>Open Hub - 開源專案安全檢測與授權建議</li>
+</ul>
+
+<h2 id="解密-https-雲端服務的美麗與哀愁-側錄--備份--防毒--稽核"><span class="mr-2">解密 HTTPS 雲端服務的美麗與哀愁: 側錄 / 備份 / 防毒 / 稽核</span><a href="#解密-https-雲端服務的美麗與哀愁-側錄--備份--防毒--稽核" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li>TLS提供了實質性的好處，但是卻也增加了分析流量的困難。</li>
+  <li>部分國家是禁止對HTTPS做解密，因為會有隱私權問題。</li>
+  <li>通常金融業是不能對HTTPS做解密，因為資料過度敏感。</li>
+  <li>有些軟體例如Line或是Messenger，沒辦法做解密，因為這些程式只要發現憑證被改就會被擋掉。</li>
+</ul>
+
+<p><strong>心得:</strong> 大部分的HTTPS解密都是透過proxy來做到，client端裝agent來換掉憑證，然後proxy端做解密的動作，接著再由proxy去跟Web Server去做連線，這樣就可以取得HTTPS的內容。</p>
+
+<h1 id="廠商只有部分">廠商(只有部分)</h1>
+<p><strong>郵件過濾及郵件安全：</strong></p>
+<ul>
+  <li>Proofpoint</li>
+</ul>
+
+<p><strong>郵件伺服器及郵件安全</strong></p>
+<ul>
+  <li>Openfind</li>
+</ul>
+
+<p><strong>特權帳號監控管理</strong></p>
+<ul>
+  <li>Cyberark</li>
+</ul>
+
+<p><strong>HTTPS流量管理監控(解密HTTPS)</strong></p>
+<ul>
+  <li>L7Ntwork</li>
+  <li>F5</li>
+</ul>
+
+<p><strong>雲端安全</strong></p>
+<ul>
+  <li>Tufin</li>
+  <li>F-Secure</li>
+</ul>
+
+<p><strong>透過DNS來防護</strong></p>
+<ul>
+  <li>Cisco Umbrella</li>
+</ul>
+
+<p><strong>端點檔案加密(為重要檔案加密)</strong></p>
+<ul>
+  <li>中華電信SecurBox</li>
+</ul>
+
+<p><strong>DDoS防護</strong></p>
+<ul>
+  <li>威睿科技 GenieATM(透過設備將流量導到F5那些去做清洗，他們只做導向的動作而已)</li>
+  <li>Arbor</li>
+  <li>Akamai</li>
+</ul>
+
+<p><strong>Log管理</strong></p>
+<ul>
+  <li>ALog</li>
+</ul>
+
+<p><strong>整合型安全風險管理平台</strong></p>
+<ul>
+  <li>tenable</li>
+  <li>IBM Security</li>
+</ul>
+
+<p><strong>Birdman新創公司</strong></p>
+<ul>
+  <li>CYCARRIER</li>
+</ul>
+
+<h1 id="其餘學習">其餘學習</h1>
+<ol>
+  <li>以往對付DDoS，廠商都是直接放一台自家設備在Gateway，當攻擊發生時設備將流量導向到Cloud Scrubbing Center去做清洗，但是這樣子對Client端還是有很大得負擔，因此發現今年許多處理DDoS的廠商，在Redirect的部分改用了BGP forwarding或是DNS Forwarding，直接在源頭就將流量導向到Scrubbing Center，這樣就不會增加Client的負擔。</li>
+  <li>市面上大部分的IP Cam都是換湯不換藥，外殼是自己設計，但是晶片可能就採用大陸晶片，這種認證通常都很脆弱，只要使用一些現有的APP就可以掃到IP cam然後免認證登入，因此在買IP cam的時候，最好選擇有通過『 IP Camera 場域實驗室』認證的IP Cam。</li>
+  <li>電影裡騙過管理者IP CAM畫面現實是做得到的，只要透過arp spoofing先去欺騙IP CAM管理器，這樣管理器就會以為駭客的電腦才是IP CAM，然後駭客再送假訊號(畫面正常的影片)給管理器，這樣管理器那邊就會一直看到是正常的畫面。</li>
+</ol>
+
+<blockquote class="prompt-info"><div>
+  <p>文章內容的轉載、重製、發佈，請註明出處: <a href="https://pohsienshih.github.io">https://pohsienshih.github.io</a></p>
+</div></blockquote>
+
+</div>
+
+<div class="post-tail-wrapper text-muted">
+
+  <!-- categories -->
+  
+  <div class="post-meta mb-3">
+    <i class="far fa-folder-open fa-fw mr-1"></i>
+    
+      <a href='/categories/security/'>Security</a>
+  </div>
+  
+
+  <!-- tags -->
+  
+  <div class="post-tags">
+    <i class="fa fa-tags fa-fw mr-1"></i>
+      
+      <a href="/tags/conference/"
+          class="post-tag no-text-decoration" >conference</a>
+      
+  </div>
+  
+
+  <div class="post-tail-bottom
+    d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+    <div class="license-wrapper">
+
+      
+
+        
+
+        This post is licensed under 
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          CC BY 4.0
+        </a>
+         by the author.
+
+      
+    </div>
+
+    <!--
+ Post sharing snippet
+-->
+
+<div class="share-wrapper">
+  <span class="share-label text-muted mr-1">Share</span>
+  <span class="share-icons">
+    
+    
+
+    
+      
+        <a href="https://twitter.com/intent/tweet?text=2019 iThome資安大會筆記 - Po-Hsien Workspace&amp;url=http://0.0.0.0:4000/blog/2019-ithome-cyber-sec-notes/" data-toggle="tooltip" data-placement="top"
+          title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+          <i class="fa-fw fab fa-twitter"></i>
+        </a>
+    
+      
+        <a href="https://www.facebook.com/sharer/sharer.php?title=2019 iThome資安大會筆記 - Po-Hsien Workspace&amp;u=http://0.0.0.0:4000/blog/2019-ithome-cyber-sec-notes/" data-toggle="tooltip" data-placement="top"
+          title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
+          <i class="fa-fw fab fa-facebook-square"></i>
+        </a>
+    
+      
+        <a href="https://t.me/share/url?url=http://0.0.0.0:4000/blog/2019-ithome-cyber-sec-notes/&amp;text=2019 iThome資安大會筆記 - Po-Hsien Workspace" data-toggle="tooltip" data-placement="top"
+          title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
+          <i class="fa-fw fab fa-telegram"></i>
+        </a>
+    
+
+    <i id="copy-link" class="fa-fw fas fa-link small"
+        data-toggle="tooltip" data-placement="top"
+        title="Copy link"
+        data-title-succeed="Link copied successfully!">
+    </i>
+
+  </span>
+</div>
+
+
+  </div><!-- .post-tail-bottom -->
+
+</div><!-- div.post-tail-wrapper -->
+
+
+      
+    
+    
+
+    </div>
+  </div> <!-- #core-wrapper -->
+
+  <!-- pannel -->
+  <div id="panel-wrapper" class="col-xl-3 pl-2 text-muted">
+
+    <div class="access">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div id="access-lastmod" class="post">
+    <div class="panel-heading">Recently Updated</div>
+    <ul class="post-content pl-0 pb-1 ml-1 mt-2">
+      
+        
+        
+        
+      <li><a href="/blog/activemq5-shared-file-system-master-slave/">ActiveMQ 5 Shared File System Master Slave</a></li>
+      
+        
+        
+        
+      <li><a href="/blog/mariadb-master-slave-replication-with-maxscale/">MariaDB Master-Slave Replication with MaxScale</a></li>
+      
+    </ul>
+  </div> <!-- #access-lastmod -->
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+  <div id="access-tags">
+    <div class="panel-heading">Trending Tags</div>
+    <div class="d-flex flex-wrap mt-3 mb-1 mr-3">
+
+    
+      
+      <a class="post-tag" href="/tags/kubernetes/">kubernetes</a>
+    
+      
+      <a class="post-tag" href="/tags/conference/">conference</a>
+    
+      
+      <a class="post-tag" href="/tags/personal/">Personal</a>
+    
+      
+      <a class="post-tag" href="/tags/high-availability/">high availability</a>
+    
+      
+      <a class="post-tag" href="/tags/pks/">pks</a>
+    
+      
+      <a class="post-tag" href="/tags/testing/">testing</a>
+    
+      
+      <a class="post-tag" href="/tags/activemq/">activemq</a>
+    
+      
+      <a class="post-tag" href="/tags/elk/">ELK</a>
+    
+      
+      <a class="post-tag" href="/tags/log/">log</a>
+    
+      
+      <a class="post-tag" href="/tags/mariadb/">mariadb</a>
+    
+
+    </div>
+  </div>
+
+
+    </div>
+
+    
+      
+      
+
+
+
+<!-- BS-toc.js will be loaded at medium priority -->
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+
+<div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+  <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+  <nav id="toc" data-toggle="toc"></nav>
+</div>
+
+
+    
+  </div>
+
+</div>
+
+<!-- tail -->
+
+<div class="row">
+  <div class="col-12 col-lg-11 col-xl-8">
+    <div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+      
+        
+        <!--
+ Recommend the other 3 posts according to the tags and categories of the current post,
+ if the number is not enough, use the other latest posts to supplement.
+-->
+
+<!-- The total size of related posts  -->
+
+
+<!-- An random integer that bigger than 0  -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy}  -->
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<!-- Fill with the other newlest posts  -->
+
+
+
+
+  
+    
+    
+      
+      
+    
+  
+    
+    
+      
+      
+        
+        
+        
+          
+
+
+
+
+
+  <div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+    <h3 class="pt-2 mt-1 mb-4 ml-1"
+      data-toc-skip>Further Reading</h3>
+    <div class="card-deck mb-4">
+    
+      
+      
+      <div class="card">
+        <a href="/blog/2019-ithome-kubernetes-summit-notes/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago small"
+    data-ts="1568668318"
+    
+    >
+  2019-09-16
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>iThome Kubernetes Summit 2019 心得</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                這次是第一次參加iThome Kubernetes Summit，當初看到早鳥票釋出就直接買了($2400左右)，以一天的Conference來說不算便宜，但是能夠去學習學習增廣見聞也是值得的。
+
+結果買票之後才得知我們社群Cloud Native Taiwan User Group(CNTUG)也有去擺攤，雖然是付費票，但是還是去支援了一下社群攤位xD。
+
+上午場都在跟附近社群交流、逛攤位...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/blog/coscup2022-the-journey-of-opensource-community-cntug/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago small"
+    data-ts="1659312000"
+    
+    >
+  2022-08-01
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                COSCUP x KCD Taiwan 2022
+今年 COSCUP 2022 終於變回實體線下活動，還是線下活動面對面比較可以與人交流，也遇到了許多好久不見得熟面孔，光是敘舊就聊不完了 xD
+
+這次我們社群 CNTUG 申請主辦台灣地區的 Kubernetes Community Day (KCD)，KCD 為 CNCF 官方的活動，性質跟 KubeConf 有點不太一樣，KCD 主要是藉...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/blog/activemq5-shared-file-system-master-slave/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago small"
+    data-ts="1650582898"
+    
+    >
+  2022-04-21
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>ActiveMQ 5 Shared File System Master Slave</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                ActiveMQ 5 在 High Availability (HA) 上分成兩種角色: master 和 slave ，類似 Active-Standby mode。在一般情況只會有 master 處理 Request，slave 待命，只有當 master 異常時，slave 才會接手這些動作。
+
+一般 ActiveMQ 都是把資料存在記憶體裡面，但是當 Broker 掛掉後，記憶體裡存...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+    </div> <!-- .card-deck -->
+  </div> <!-- #related-posts -->
+
+
+      
+        
+        <!--
+  Navigation buttons at the bottom of the post.
+-->
+
+<div class="post-navigation d-flex justify-content-between">
+  
+  <a href="/blog/ssh-tunnel-introduction/" class="btn btn-outline-primary"
+    prompt="Older">
+    <p>SSH Tunnel介紹</p>
+  </a>
+  
+
+  
+  <a href="/blog/enterprise-pks-introduction/" class="btn btn-outline-primary"
+    prompt="Newer">
+    <p>Enterprise PKS介紹</p>
+  </a>
+  
+
+</div>
+
+      
+        
+        <!--  The comments switcher -->
+
+
+      
+    </div>
+  </div>
+</div> <!-- .row -->
+
+
+
+        <!--
+  The Footer
+-->
+
+<footer class="d-flex w-100 justify-content-center">
+  <div class="d-flex justify-content-between align-items-center text-muted">
+    <div class="footer-left">
+      <p class="mb-0">
+        © 2022
+        <a href="https://github.com/username">Po-Hsien Shih</a>.
+        
+        <span data-toggle="tooltip" data-placement="top"
+          title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span>
+        
+      </p>
+    </div>
+
+    <div class="footer-right">
+      <p class="mb-0">
+        
+
+        
+
+        Powered by 
+          <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
+         with 
+          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>
+         theme.
+
+      </p>
+    </div>
+
+  </div> <!-- div.d-flex -->
+</footer>
+
+
+      </div>
+
+      <!--
+  The Search results
+-->
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded">
+  <div class="col-12 col-sm-11 post-content">
+    <div id="search-hints">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+  <div id="access-tags">
+    <div class="panel-heading">Trending Tags</div>
+    <div class="d-flex flex-wrap mt-3 mb-1 mr-3">
+
+    
+      
+      <a class="post-tag" href="/tags/kubernetes/">kubernetes</a>
+    
+      
+      <a class="post-tag" href="/tags/conference/">conference</a>
+    
+      
+      <a class="post-tag" href="/tags/personal/">Personal</a>
+    
+      
+      <a class="post-tag" href="/tags/high-availability/">high availability</a>
+    
+      
+      <a class="post-tag" href="/tags/pks/">pks</a>
+    
+      
+      <a class="post-tag" href="/tags/testing/">testing</a>
+    
+      
+      <a class="post-tag" href="/tags/activemq/">activemq</a>
+    
+      
+      <a class="post-tag" href="/tags/elk/">ELK</a>
+    
+      
+      <a class="post-tag" href="/tags/log/">log</a>
+    
+      
+      <a class="post-tag" href="/tags/mariadb/">mariadb</a>
+    
+
+    </div>
+  </div>
+
+
+    </div>
+    <div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+  </div>
+</div>
+
+
+    </div> <!-- #main-wrapper -->
+
+    
+
+    <div id="mask"></div>
+
+    <a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!--
+  Jekyll Simple Search loader
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+-->
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
+
+<script>
+SimpleJekyllSearch({
+  searchInput: document.getElementById('search-input'),
+  resultsContainer: document.getElementById('search-results'),
+  json: '/assets/js/data/search.json',
+  searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0">  <a href="{url}">{title}</a>  <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">    {categories}    {tags}  </div>  <p>{snippet}</p></div>',
+  noResultsText: '<p class="mt-5">Oops! No result founds.</p>',
+  templateMiddleware: function(prop, value, template) {
+    if (prop === 'categories') {
+      if (value === '') {
+        return `${value}`;
+      } else {
+        return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+      }
+    }
+
+    if (prop === 'tags') {
+      if (value === '') {
+        return `${value}`;
+      } else {
+        return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+      }
+    }
+  }
+});
+</script>
+
+
+    <!--
+  JS selector for site.
+-->
+
+<!-- layout specified -->
+
+
+  
+
+
+
+  <!-- image lazy-loading & popup & clipboard -->
+  
+
+  
+
+
+
+
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script>
+
+
+
+
+
+
+
+
+<script defer src="/assets/js/dist/post.min.js"></script>
+
+
+
+<!-- commons -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+  </body>
+
+</html>
+

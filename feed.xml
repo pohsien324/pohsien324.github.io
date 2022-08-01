@@ -1,1 +1,249 @@
-<feed xmlns="http://www.w3.org/2005/Atom"> <id>https://blog.phshih.com/</id><title>Po-Hsien Workspace</title><subtitle>Po-Hsien, pohsien, Cloud Native, Containerization, Virtualization, Linux Technologies. </subtitle> <updated>2022-07-08T02:32:31+00:00</updated> <author> <name>Po-Hsien Shih</name> <uri>https://blog.phshih.com/</uri> </author><link rel="self" type="application/atom+xml" href="https://blog.phshih.com/feed.xml"/><link rel="alternate" type="text/html" hreflang="en" href="https://blog.phshih.com/"/> <generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator> <rights> © 2022 Po-Hsien Shih </rights> <icon>/assets/img/favicons/favicon.ico</icon> <logo>/assets/img/favicons/favicon-96x96.png</logo> <entry><title>ActiveMQ 5 Shared File System Master Slave</title><link href="https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" rel="alternate" type="text/html" title="ActiveMQ 5 Shared File System Master Slave" /><published>2022-04-21T23:14:58+00:00</published> <updated>2022-04-21T23:14:58+00:00</updated> <id>https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/</id> <content src="https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" /> <author> <name>Po-Hsien Shih</name> </author> <category term="Others" /> <summary> ActiveMQ 5 在 High Availability (HA) 上分成兩種角色: master 和 slave ，類似 Active-Standby mode。在一般情況只會有 master 處理 Request，slave 待命，只有當 master 異常時，slave 才會接手這些動作。 一般 ActiveMQ 都是把資料存在記憶體裡面，但是當 Broker 掛掉後，記憶體裡存放的 Message 會消失，因此在 HA 的概念就是要想辦法把 Message 變成 Persistent Data 存在 Disk，然後當 Broker 恢復時或是其他 Broker 接手時，可以直接存取這個 Persistent Data 來接手處理 Message。 ActiveMQ 5 HA 分成兩種方式: Shared File System Master Slave (Sh... </summary> </entry> <entry><title>MariaDB Master-Slave Replication with MaxScale</title><link href="https://blog.phshih.com/blog/mariadb-master-slave-replication-with-maxscale/" rel="alternate" type="text/html" title="MariaDB Master-Slave Replication with MaxScale" /><published>2022-03-05T12:24:21+00:00</published> <updated>2022-06-06T03:52:26+00:00</updated> <id>https://blog.phshih.com/blog/mariadb-master-slave-replication-with-maxscale/</id> <content src="https://blog.phshih.com/blog/mariadb-master-slave-replication-with-maxscale/" /> <author> <name>Po-Hsien Shih</name> </author> <category term="Database" /> <summary> 最近因工作關係剛好研究到 MariaDB High Availability (HA) 機制，因此本篇整理一下 MariaDB Master-Slave Replication 的相關筆記。 在一個系統環境裡，資料庫通常扮演著很重要的角色，主要負責存放系統的一些紀錄或是使用者的資料，因此資料庫的備援/高可用性 (High Availability)以及負載平衡 (Load Balancing) 就變得相當重要。 目前 MariaDB 針對 High Availability 有以下常見的幾種方式: Master-Slave Replication (A-S Mode) Master-Master Replication (A-A Mode) Galera Cluster Master-Master (A-A Mode) Galera... </summary> </entry> <entry><title>2021 個人年度回顧</title><link href="https://blog.phshih.com/blog/2021-review/" rel="alternate" type="text/html" title="2021 個人年度回顧" /><published>2021-12-31T22:02:55+00:00</published> <updated>2021-12-31T22:02:55+00:00</updated> <id>https://blog.phshih.com/blog/2021-review/</id> <content src="https://blog.phshih.com/blog/2021-review/" /> <author> <name>Po-Hsien Shih</name> </author> <category term="Others" /> <summary> 不知不覺一年又過了，又到了年底回顧及審思的時間。 2021 算是個人比較混亂的一年，不管是工作還是個人上，覺得今年整體都蠻混亂，工作上的問題比較多，導致沒辦法切割拿捏生活跟工作，所以今年都比較封閉一點，連部落格都停擺。不過還好到年底慢慢穩定下來，且有機會好好休息，能夠停下腳步好好審視今年，並為 2022 做準備。 不過不管如何，2021 年都順利結束，明年繼續加油。 2021 回顧 休閒及其他 年初因為一些私人事情陷入了完全低潮，很謝謝周遭朋友鼓勵跟打氣，才能快速振作。 持續參加健身課，重訓 + TRX + 有氧，不過後來中間疫情中斷，有點復胖回來。 買了專業證照課，準備了一兩個月，完全沒時間考，浪費了考試卷的錢，明年要繼續努力考到！ 今年在社群上比較沒有特別精力參與，希望自己能整頓一下，然後好好回歸協助夥伴相關事務！ 工作方面 成功帶完 ... </summary> </entry> <entry><title>2020 個人年度回顧</title><link href="https://blog.phshih.com/blog/2020-review/" rel="alternate" type="text/html" title="2020 個人年度回顧" /><published>2020-12-31T16:25:20+00:00</published> <updated>2020-12-31T16:25:20+00:00</updated> <id>https://blog.phshih.com/blog/2020-review/</id> <content src="https://blog.phshih.com/blog/2020-review/" /> <author> <name>Po-Hsien Shih</name> </author> <category term="Others" /> <summary> 2020 回顧 2020 年真的是讓人印象深刻的一年，因為新冠肺炎影響關係，許多計畫都被影響，但就整體上來看，今年對我個人來說仍然算是一個蠻有收穫的一年，做了許多嘗試以及達各種成就。 工作方面 今年初換了新公司，算是一個新的開始，雖然忙到炸裂，進去還沒過試用期，就忙到好像過了好幾年一樣，但卻是忙得有意義，非常充實。 新公司: 換了新公司，一個新的開始。 Work From Home 初體驗: 由於部門較彈性加上疫情關係，因此可以在家上班，算是一個新的體驗，不過雖然 Work From Home 很自由，但是也有相對的缺點，例如同事溝通討論困難、沒有下班的感覺或邊緣化 QQ 之類的。 帶實習生: 一次帶了 8 個實習生(大學生)，雖然工作量增加了，但是跟這群年輕大學生一起 co-work 也為工作氛圍帶來了幾分樂趣。 半夜系統升版: 第一次體驗半夜到客戶那邊升... </summary> </entry> <entry><title>2020 VoiceTube Hero 零元挑戰心得</title><link href="https://blog.phshih.com/blog/2020-voicetube-hero/" rel="alternate" type="text/html" title="2020 VoiceTube Hero 零元挑戰心得" /><published>2020-08-11T00:00:00+00:00</published> <updated>2020-08-11T00:00:00+00:00</updated> <id>https://blog.phshih.com/blog/2020-voicetube-hero/</id> <content src="https://blog.phshih.com/blog/2020-voicetube-hero/" /> <author> <name>Po-Hsien Shih</name> </author> <category term="Others" /> <summary> 今年二月的時候，想說加強英文，報名了 VoiceTube Hero 挑戰，然後還直接報名當時第八屆最長的 6 個月 90 堂課挑戰。然後因為怕沒動力所以抓了其他朋友一起挑戰，還創個群組大家每天互相提醒要上課。 這個挑戰主要是在期限內(6個月內)，符合以下條件，就可以全額退費： 上完 90 堂課 每堂課複習 2 次，也就是半年要上 90 * 3 = 270 次 每週至少要上 12 堂課，只要一週失敗，直接挑戰失敗 一堂課會提供影片，影片看完之後，做選擇題/克漏字/文法/口說/單字測驗，平均一堂課約 30-40 分鐘左右，有時候遇到很難的會更久。 VoiceTube 有提供 Web 跟 App，所以可以根據自己方便決定要使用哪一個平台上課。 一開始想說一天 2 堂課還好，每天花個 1~2 小時上，強迫自己學習，但是有時候當週很忙就會非常累，例如加班到晚上回家還要補上... </summary> </entry> </feed>
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://0.0.0.0:4000/</id>
+  <title>Po-Hsien Workspace</title>
+  <subtitle>Po-Hsien, pohsien, Cloud Native, Containerization, Virtualization, Linux Technologies. </subtitle>
+  <updated>2022-08-01T16:06:24+00:00</updated>
+  <author>
+    <name>Po-Hsien Shih</name>
+    <uri>http://0.0.0.0:4000/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="http://0.0.0.0:4000/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en"
+    href="http://0.0.0.0:4000/"/>
+  <generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator>
+  <rights> © 2022 Po-Hsien Shih </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan</title>
+    <link href="http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/" rel="alternate" type="text/html" title="COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan" />
+    <published>2022-08-01T00:00:00+00:00</published>
+  
+    <updated>2022-08-01T00:00:00+00:00</updated>
+  
+    <id>http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/</id>
+    <content src="http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/" />
+    <author>
+      <name>Po-Hsien Shih</name>
+    </author>
+
+  
+    
+    <category term="Others" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      COSCUP x KCD Taiwan 2022
+今年 COSCUP 2022 終於變回實體線下活動，還是線下活動面對面比較可以與人交流，也遇到了許多好久不見得熟面孔，光是敘舊就聊不完了 xD
+
+這次我們社群 CNTUG 申請主辦台灣地區的 Kubernetes Community Day (KCD)，KCD 為 CNCF 官方的活動，性質跟 KubeConf 有點不太一樣，KCD 主要是藉由各地區當地的社群來推廣 Cloud Native 以及 Kubernetes 文化的一個活動，所以會由各國家地區的社群來主持這個活動，而台灣地區的就是 KCD Taiwan。
+
+今年 KCD Taiwan 跟 COSCUP 2022 一起合作，所以可以看到 COSCUP 2022 官網會有 COSCUP x KCD Taiwan 2022 以及吉祥物，而有一個主議程軌 (7/30 AU 視聽館)...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>ActiveMQ 5 Shared File System Master Slave</title>
+    <link href="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" rel="alternate" type="text/html" title="ActiveMQ 5 Shared File System Master Slave" />
+    <published>2022-04-21T23:14:58+00:00</published>
+  
+    <updated>2022-08-01T15:02:01+00:00</updated>
+  
+    <id>http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/</id>
+    <content src="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" />
+    <author>
+      <name>Po-Hsien Shih</name>
+    </author>
+
+  
+    
+    <category term="Others" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      ActiveMQ 5 在 High Availability (HA) 上分成兩種角色: master 和 slave ，類似 Active-Standby mode。在一般情況只會有 master 處理 Request，slave 待命，只有當 master 異常時，slave 才會接手這些動作。
+
+一般 ActiveMQ 都是把資料存在記憶體裡面，但是當 Broker 掛掉後，記憶體裡存放的 Message 會消失，因此在 HA 的概念就是要想辦法把 Message 變成 Persistent Data 存在 Disk，然後當 Broker 恢復時或是其他 Broker 接手時，可以直接存取這個 Persistent Data 來接手處理 Message。
+
+ActiveMQ 5 HA 分成兩種方式:
+
+
+  Shared File System Master Slave (Sh...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>MariaDB Master-Slave Replication with MaxScale</title>
+    <link href="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" rel="alternate" type="text/html" title="MariaDB Master-Slave Replication with MaxScale" />
+    <published>2022-03-05T12:24:21+00:00</published>
+  
+    <updated>2022-06-06T03:52:26+00:00</updated>
+  
+    <id>http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/</id>
+    <content src="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" />
+    <author>
+      <name>Po-Hsien Shih</name>
+    </author>
+
+  
+    
+    <category term="Database" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      最近因工作關係剛好研究到 MariaDB High Availability (HA) 機制，因此本篇整理一下 MariaDB Master-Slave Replication 的相關筆記。
+
+在一個系統環境裡，資料庫通常扮演著很重要的角色，主要負責存放系統的一些紀錄或是使用者的資料，因此資料庫的備援/高可用性 (High Availability)以及負載平衡 (Load Balancing) 就變得相當重要。
+
+目前 MariaDB 針對 High Availability 有以下常見的幾種方式:
+
+
+  Master-Slave Replication         (A-S Mode)
+  Master-Master Replication       (A-A Mode)
+  Galera Cluster Master-Master (A-A Mode)
+  Galera...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>2021 個人年度回顧</title>
+    <link href="http://0.0.0.0:4000/blog/2021-review/" rel="alternate" type="text/html" title="2021 個人年度回顧" />
+    <published>2021-12-31T22:02:55+00:00</published>
+  
+    <updated>2021-12-31T22:02:55+00:00</updated>
+  
+    <id>http://0.0.0.0:4000/blog/2021-review/</id>
+    <content src="http://0.0.0.0:4000/blog/2021-review/" />
+    <author>
+      <name>Po-Hsien Shih</name>
+    </author>
+
+  
+    
+    <category term="Others" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      不知不覺一年又過了，又到了年底回顧及審思的時間。
+
+2021 算是個人比較混亂的一年，不管是工作還是個人上，覺得今年整體都蠻混亂，工作上的問題比較多，導致沒辦法切割拿捏生活跟工作，所以今年都比較封閉一點，連部落格都停擺。不過還好到年底慢慢穩定下來，且有機會好好休息，能夠停下腳步好好審視今年，並為 2022 做準備。
+
+不過不管如何，2021 年都順利結束，明年繼續加油。
+
+2021 回顧
+
+
+
+休閒及其他
+
+
+  年初因為一些私人事情陷入了完全低潮，很謝謝周遭朋友鼓勵跟打氣，才能快速振作。
+  持續參加健身課，重訓 + TRX + 有氧，不過後來中間疫情中斷，有點復胖回來。
+  買了專業證照課，準備了一兩個月，完全沒時間考，浪費了考試卷的錢，明年要繼續努力考到！
+  今年在社群上比較沒有特別精力參與，希望自己能整頓一下，然後好好回歸協助夥伴相關事務！
+
+
+工作方面
+
+
+  成功帶完 ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>2020 個人年度回顧</title>
+    <link href="http://0.0.0.0:4000/blog/2020-review/" rel="alternate" type="text/html" title="2020 個人年度回顧" />
+    <published>2020-12-31T16:25:20+00:00</published>
+  
+    <updated>2020-12-31T16:25:20+00:00</updated>
+  
+    <id>http://0.0.0.0:4000/blog/2020-review/</id>
+    <content src="http://0.0.0.0:4000/blog/2020-review/" />
+    <author>
+      <name>Po-Hsien Shih</name>
+    </author>
+
+  
+    
+    <category term="Others" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      2020 回顧
+
+2020 年真的是讓人印象深刻的一年，因為新冠肺炎影響關係，許多計畫都被影響，但就整體上來看，今年對我個人來說仍然算是一個蠻有收穫的一年，做了許多嘗試以及達各種成就。
+
+工作方面
+今年初換了新公司，算是一個新的開始，雖然忙到炸裂，進去還沒過試用期，就忙到好像過了好幾年一樣，但卻是忙得有意義，非常充實。
+
+
+
+  新公司: 換了新公司，一個新的開始。
+  Work From Home 初體驗: 由於部門較彈性加上疫情關係，因此可以在家上班，算是一個新的體驗，不過雖然 Work From Home 很自由，但是也有相對的缺點，例如同事溝通討論困難、沒有下班的感覺或邊緣化 QQ 之類的。
+  帶實習生: 一次帶了 8 個實習生(大學生)，雖然工作量增加了，但是跟這群年輕大學生一起 co-work 也為工作氛圍帶來了幾分樂趣。
+  半夜系統升版: 第一次體驗半夜到客戶那邊升...
+    </summary>
+  
+
+  </entry>
+
+</feed>
+
+

@@ -1,47 +1,3475 @@
-<!DOCTYPE html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="keywords" content="activemq, master-slave, activemq 5,ha, high availability"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="ActiveMQ 5 Shared File System Master Slave" /><meta property="og:locale" content="en" /><meta name="description" content="activemq,master-slave,activemq 5,ha, high availability" /><meta property="og:description" content="activemq,master-slave,activemq 5,ha, high availability" /><link rel="canonical" href="https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" /><meta property="og:url" content="https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" /><meta property="og:site_name" content="Po-Hsien Workspace" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2022-04-21T23:14:58+00:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="ActiveMQ 5 Shared File System Master Slave" /><meta name="twitter:site" content="@twitter_username" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-04-21T23:14:58+00:00","datePublished":"2022-04-21T23:14:58+00:00","description":"activemq,master-slave,activemq 5,ha, high availability","headline":"ActiveMQ 5 Shared File System Master Slave","mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/"},"url":"https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/"}</script><title>ActiveMQ 5 Shared File System Master Slave | Po-Hsien Workspace</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Po-Hsien Workspace"><meta name="application-name" content="Po-Hsien Workspace"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src=" /assets/images/pohsien.jpg " alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">Po-Hsien Workspace</a></div><div class="site-subtitle font-italic">Cloud Native, Containerization, Virtualization, Linux Technologies.</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/pohsien324" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['pohsien324','gmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="https://www.linkedin.com/in/po-hsien-shih-23bbb1162/" aria-label="linkedin" target="_blank" rel="noopener"> <i class="fab fa-linkedin"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>ActiveMQ 5 Shared File System Master Slave</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>ActiveMQ 5 Shared File System Master Slave</h1><div class="post-meta text-muted"><div> By <em> <a href="https://github.com/username">Po-Hsien Shih</a> </em></div><div class="d-flex"><div> <span> Posted <em class="timeago" data-ts="1650582898" data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll" > 2022-04-21 </em> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1235 words"> <em>6 min</em> read</span></div></div></div><div class="post-content"><p>ActiveMQ 5 在 High Availability (HA) 上分成兩種角色: <code class="language-plaintext highlighter-rouge">master</code> 和 <code class="language-plaintext highlighter-rouge">slave</code> ，類似 Active-Standby mode。在一般情況只會有 master 處理 Request，slave 待命，只有當 master 異常時，slave 才會接手這些動作。</p><p>一般 ActiveMQ 都是把資料存在記憶體裡面，但是當 Broker 掛掉後，記憶體裡存放的 Message 會消失，因此在 HA 的概念就是要想辦法把 Message 變成 Persistent Data 存在 Disk，然後當 Broker 恢復時或是其他 Broker 接手時，可以直接存取這個 Persistent Data 來接手處理 Message。</p><p>ActiveMQ 5 HA 分成兩種方式:</p><ul><li><a href="https://activemq.apache.org/shared-file-system-master-slave">Shared File System Master Slave</a> (Share Filesystem)<li><a href="https://activemq.apache.org/jdbc-master-slave">JDBC Master Slave</a> (Share Database)</ul><p>本篇文章主要會探討的是 ActiveMQ 5 的 Shared File System Master Slave 模式。</p><h2 id="shared-file-system-master-slave-introduction"><span class="mr-2">Shared File System Master Slave Introduction</span><a href="#shared-file-system-master-slave-introduction" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>這個模式是會將 ActiveMQ 的 Persistent Data (Status 或 Message) 儲存在 Shared File System (如 NFS 或是 SAN)，再讓其他 ActiveMQ 掛載 Shared File System，讓全部 ActiveMQ 節點共同擁有這些資料。</p><p>在開始實作前，先介紹一下運作機制。</p><p>ActiveMQ 可以在 <code class="language-plaintext highlighter-rouge">activemq.xml</code> 的 <code class="language-plaintext highlighter-rouge">persistenceAdapter</code> 啟用 Local Database - <a href="https://activemq.apache.org/kahadb">KahaDB</a> 來儲存 Persistent Data，ActiveMQ 會把 Message 存成 Log 檔存放在 Broker Local 的 KahaDB 目錄裡，預設都不改設定的話 KahaDB 位置為 <code class="language-plaintext highlighter-rouge">${activemq.data}/kahadb</code> 也就是 ActiveMQ 目錄底下的 <code class="language-plaintext highlighter-rouge">data/kahadb</code>。</p><div class="language-xml highlighter-rouge"><div class="code-header"> <span data-label-text="XML"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html lang="en"
+  
+>
+
+  <!--
+  The Head
+-->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  
+  <meta name="keywords" content="activemq, master-slave, activemq 5,ha, high availability">
+  
+  <!-- Allow having a localized datetime different from the appearance language -->
+  
+
+  
+
+    
+
+    
+
+  
+
+  
+
+  
+
+  
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.2.2" />
+<meta property="og:title" content="ActiveMQ 5 Shared File System Master Slave" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="activemq,master-slave,activemq 5,ha, high availability" />
+<meta property="og:description" content="activemq,master-slave,activemq 5,ha, high availability" />
+<link rel="canonical" href="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" />
+<meta property="og:url" content="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" />
+<meta property="og:site_name" content="Po-Hsien Workspace" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-04-21T23:14:58+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="ActiveMQ 5 Shared File System Master Slave" />
+<meta name="twitter:site" content="@twitter_username" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2022-08-01T15:02:01+00:00","datePublished":"2022-04-21T23:14:58+00:00","description":"activemq,master-slave,activemq 5,ha, high availability","headline":"ActiveMQ 5 Shared File System Master Slave","mainEntityOfPage":{"@type":"WebPage","@id":"http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/"},"url":"http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  
+
+  <title>ActiveMQ 5 Shared File System Master Slave | Po-Hsien Workspace
+  </title>
+
+  <!--
+  The Favicons for Web, Android, Microsoft, and iOS (iPhone and iPad) Apps
+  Generated by: https://realfavicongenerator.net/
+-->
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
+<link rel="manifest" href="/assets/img/favicons/site.webmanifest">
+<link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Po-Hsien Workspace">
+<meta name="application-name" content="Po-Hsien Workspace">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+  
+
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://cdn.jsdelivr.net" >
+      <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" >
+    
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
+
+  
+
+  <!-- GA -->
+  
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css">
+
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+  
+
+  
+    <!-- Manific Popup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css">
+  
+
+  <!-- JavaScript -->
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+
+  
+    <!--
+  Switch the mode between dark and light.
+-->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() { return "mode"; }
+    static get MODE_ATTR() { return "data-mode"; }
+    static get DARK_MODE() { return "dark"; }
+    static get LIGHT_MODE() { return "light"; }
+    static get ID() { return "mode-toggle"; }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener("change", () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+
+      });
+
+    } /* constructor() */
+
+    get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
+
+    get isSysDarkPrefer() { return this.sysDarkPrefers.matches; }
+
+    get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; }
+
+    get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; }
+
+    get hasMode() { return this.mode != null; }
+
+    get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode
+        || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      $('html').removeAttr(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage({
+        direction: ModeToggle.ID,
+        message: this.modeStatus
+      }, "*");
+    }
+
+  } /* ModeToggle */
+
+  const toggle = new ModeToggle();
+
+  function flipMode() {
+    if (toggle.hasMode) {
+      if (toggle.isSysDarkPrefer) {
+        if (toggle.isLightMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setLight();
+        }
+
+      } else {
+        if (toggle.isDarkMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setDark();
+        }
+      }
+
+    } else {
+      if (toggle.isSysDarkPrefer) {
+        toggle.setLight();
+      } else {
+        toggle.setDark();
+      }
+    }
+
+    toggle.notify();
+
+  } /* flipMode() */
+
+</script>
+
+  
+</head>
+
+
+  
+    <!--
+  Switch the mode between dark and light.
+-->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() { return "mode"; }
+    static get MODE_ATTR() { return "data-mode"; }
+    static get DARK_MODE() { return "dark"; }
+    static get LIGHT_MODE() { return "light"; }
+    static get ID() { return "mode-toggle"; }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener("change", () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+
+      });
+
+    } /* constructor() */
+
+    get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
+
+    get isSysDarkPrefer() { return this.sysDarkPrefers.matches; }
+
+    get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; }
+
+    get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; }
+
+    get hasMode() { return this.mode != null; }
+
+    get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode
+        || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      $('html').removeAttr(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage({
+        direction: ModeToggle.ID,
+        message: this.modeStatus
+      }, "*");
+    }
+
+  } /* ModeToggle */
+
+  const toggle = new ModeToggle();
+
+  function flipMode() {
+    if (toggle.hasMode) {
+      if (toggle.isSysDarkPrefer) {
+        if (toggle.isLightMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setLight();
+        }
+
+      } else {
+        if (toggle.isDarkMode) {
+          toggle.clearMode();
+        } else {
+          toggle.setDark();
+        }
+      }
+
+    } else {
+      if (toggle.isSysDarkPrefer) {
+        toggle.setLight();
+      } else {
+        toggle.setDark();
+      }
+    }
+
+    toggle.notify();
+
+  } /* flipMode() */
+
+</script>
+
+  
+
+  <body data-spy="scroll" data-target="#toc" data-topbar-visible="true">
+
+    <!--
+  The Side Bar
+-->
+
+<div id="sidebar" class="d-flex flex-column align-items-end">
+  <div class="profile-wrapper text-center">
+    <div id="avatar">
+      <a href="/" alt="avatar" class="mx-auto">
+        
+          
+          <img src="
+            
+              /assets/images/pohsien.jpg
+            
+          " alt="avatar" onerror="this.style.display='none'">
+        
+      </a>
+    </div>
+
+    <div class="site-title mt-3">
+      <a href="/">Po-Hsien Workspace</a>
+    </div>
+    <div class="site-subtitle font-italic">Cloud Native, Containerization, Virtualization, Linux Technologies.</div>
+
+  </div><!-- .profile-wrapper -->
+
+  <ul class="w-100">
+
+    <!-- home -->
+    <li class="nav-item">
+      <a href="/" class="nav-link">
+        <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i>
+        <span>HOME</span>
+      </a>
+    </li>
+    <!-- the real tabs -->
+    
+    <li class="nav-item">
+      <a href="/categories/" class="nav-link">
+        <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>CATEGORIES</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/tags/" class="nav-link">
+        <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>TAGS</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/archives/" class="nav-link">
+        <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>ARCHIVES</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+    <li class="nav-item">
+      <a href="/about/" class="nav-link">
+        <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i>
+        
+
+        <span>ABOUT</span>
+      </a>
+    </li> <!-- .nav-item -->
+    
+
+  </ul> <!-- ul.nav.flex-column -->
+
+  <div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center">
+
+    
+      <button class="mode-toggle btn" aria-label="Switch Mode">
+        <i class="fas fa-adjust"></i>
+      </button>
+
+      
+        <span class="icon-border"></span>
+      
+    
+
+    
+      
+
+      
+      <a href="https://github.com/pohsien324" aria-label="github"
+        target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="
+          javascript:location.href = 'mailto:' + ['pohsien324','gmail.com'].join('@')" aria-label="email"
+        >
+        <i class="fas fa-envelope"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="https://www.linkedin.com/in/po-hsien-shih-23bbb1162/" aria-label="linkedin"
+        target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      
+
+    
+      
+
+      
+      <a href="/feed.xml" aria-label="rss"
+        >
+        <i class="fas fa-rss"></i>
+      </a>
+      
+
+    
+
+  </div> <!-- .sidebar-bottom -->
+
+</div><!-- #sidebar -->
+
+
+    <!--
+  The Top Bar
+-->
+
+<div id="topbar-wrapper" class="row justify-content-center">
+  <div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between">
+    <span id="breadcrumb">
+
+    
+
+    
+
+      
+
+        
+          <span>
+            <a href="/">
+              Home
+            </a>
+          </span>
+
+        
+
+      
+
+        
+
+      
+
+        
+
+          
+            <span>ActiveMQ 5 Shared File System Master Slave</span>
+          
+
+        
+
+      
+
+    
+
+    </span><!-- endof #breadcrumb -->
+
+    <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i>
+
+    <div id="topbar-title">
+      Post
+    </div>
+
+    <i id="search-trigger" class="fas fa-search fa-fw"></i>
+    <span id="search-wrapper" class="align-items-center">
+      <i class="fas fa-search fa-fw"></i>
+      <input class="form-control" id="search-input" type="search"
+        aria-label="search" autocomplete="off" placeholder="Search...">
+    </span>
+    <span id="search-cancel" >Cancel</span>
+  </div>
+
+</div>
+
+
+    <div id="main-wrapper">
+      <div id="main">
+
+        
+
+
+
+
+
+
+
+
+
+<div class="row">
+
+  <!-- core -->
+  <div id="core-wrapper" class="col-12 col-lg-11 col-xl-8">
+    <div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+
+    
+
+    
+      
+      
+        <!--
+  Refactor the HTML structure.
+-->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Add attribute 'hide-bullet' to the checkbox list -->
+
+
+
+<!-- images -->
+
+
+
+
+  
+  
+
+  
+    
+      
+      
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+
+      
+    
+
+    
+      
+
+        <!-- Add CDN URL -->
+        
+
+        <!-- Add image path -->
+        
+
+        
+        
+
+      
+
+      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+
+      
+
+    
+
+    <!-- Add SVG placehoder to prevent layout reflow -->
+
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    
+
+  
+
+  
+
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+
+    
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+
+
+
+<!-- Wrap prompt element of blockquote with the <div> tag -->
+
+
+
+
+
+
+
+  
+  
+
+  
+
+    
+      
+      
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+        
+        
+
+    
+
+    
+    
+
+    
+
+  
+
+  
+
+
+
+<!-- return -->
+
+
+
+
+
+
+
+<h1 data-toc-skip>ActiveMQ 5 Shared File System Master Slave</h1>
+
+<div class="post-meta text-muted">
+
+  <!-- author -->
+  <div>
+    
+    
+
+    
+
+    By
+    <em>
+      
+        <a href="https://github.com/username">Po-Hsien Shih</a>
+      
+    </em>
+  </div>
+
+  <div class="d-flex">
+    <div>
+      <!-- published date -->
+      <span>
+        Posted
+        <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago"
+    data-ts="1650582898"
+    
+      data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"
+    
+    >
+  2022-04-21
+</em>
+
+      </span>
+
+      <!-- lastmod date -->
+      
+      <span>
+        Updated
+        <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago"
+    data-ts="1659366121"
+    
+      data-toggle="tooltip" data-placement="bottom" data-tooltip-df="llll"
+    
+    >
+  2022-08-01
+</em>
+
+      </span>
+      
+
+      <!-- read time -->
+      <!--
+  Calculate the post's reading time, and display the word count in tooltip
+ -->
+
+
+
+<!-- words per minute  -->
+
+
+
+
+
+
+
+
+
+
+<!-- return element -->
+<span class="readtime" data-toggle="tooltip" data-placement="bottom"
+  title="1235 words">
+  <em>6 min</em> read</span>
+
+
+      <!-- page views -->
+      
+    </div>
+
+  </div> <!-- .d-flex -->
+
+</div> <!-- .post-meta -->
+
+<div class="post-content">
+  <p>ActiveMQ 5 在 High Availability (HA) 上分成兩種角色: <code class="language-plaintext highlighter-rouge">master</code> 和 <code class="language-plaintext highlighter-rouge">slave</code> ，類似 Active-Standby mode。在一般情況只會有 master 處理 Request，slave 待命，只有當 master 異常時，slave 才會接手這些動作。</p>
+
+<p>一般 ActiveMQ 都是把資料存在記憶體裡面，但是當 Broker 掛掉後，記憶體裡存放的 Message 會消失，因此在 HA 的概念就是要想辦法把 Message 變成 Persistent Data 存在 Disk，然後當 Broker 恢復時或是其他 Broker 接手時，可以直接存取這個 Persistent Data 來接手處理 Message。</p>
+
+<p>ActiveMQ 5 HA 分成兩種方式:</p>
+
+<ul>
+  <li><a href="https://activemq.apache.org/shared-file-system-master-slave">Shared File System Master Slave</a> (Share Filesystem)</li>
+  <li><a href="https://activemq.apache.org/jdbc-master-slave">JDBC Master Slave</a> (Share Database)</li>
+</ul>
+
+<p>本篇文章主要會探討的是 ActiveMQ 5 的 Shared File System Master Slave 模式。</p>
+
+<!--more-->
+
+<h2 id="shared-file-system-master-slave-introduction"><span class="mr-2">Shared File System Master Slave Introduction</span><a href="#shared-file-system-master-slave-introduction" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+
+<p>這個模式是會將 ActiveMQ 的 Persistent Data (Status 或 Message) 儲存在 Shared File System (如 NFS 或是 SAN)，再讓其他 ActiveMQ 掛載 Shared File System，讓全部 ActiveMQ 節點共同擁有這些資料。</p>
+
+<p>在開始實作前，先介紹一下運作機制。</p>
+
+<p>ActiveMQ 可以在 <code class="language-plaintext highlighter-rouge">activemq.xml</code> 的 <code class="language-plaintext highlighter-rouge">persistenceAdapter</code> 啟用 Local Database - <a href="https://activemq.apache.org/kahadb">KahaDB</a> 來儲存 Persistent Data，ActiveMQ 會把 Message 存成 Log 檔存放在 Broker Local 的  KahaDB 目錄裡，預設都不改設定的話 KahaDB 位置為 <code class="language-plaintext highlighter-rouge">${activemq.data}/kahadb</code> 也就是 ActiveMQ 目錄底下的 <code class="language-plaintext highlighter-rouge">data/kahadb</code>。</p>
+
+<div class="language-xml highlighter-rouge"><div class="code-header">
+        <span data-label-text="XML"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-</pre><td class="rouge-code"><pre>        <span class="nt">&lt;persistenceAdapter&gt;</span>
+</pre></td><td class="rouge-code"><pre>        <span class="nt">&lt;persistenceAdapter&gt;</span>
             <span class="nt">&lt;kahaDB</span> <span class="na">directory=</span><span class="s">"${activemq.data}/kahadb"</span><span class="nt">/&gt;</span>
         <span class="nt">&lt;/persistenceAdapter&gt;</span>
-</pre></table></code></div></div><p>而在 Shared File System Master Slave 模式下，會把 Shared File System Volume 掛載到 KahaDB 目錄裡，如此一來 Master 跟所有 Slave ActiveMQ 節點都會取得同一個 KahaDB 資料，且這種方式會整合 Lock 機制，先搶到存取權的節點將會變成 Master，而其他結點就會變成 Slave， Slave 狀態的節點大部分服務都不會啟動，只會啟動一個很簡單的 Java 檔，定期檢查 KahaDB 是否已經被 Release，如有被 Release，就會啟動全部服務搶先變成 Master。</p><ol><li><p>啟用時，只會有一台 Master 存在，其他搶輸的為 Slave (在此 Database1 為 KahaDB) <img data-src="/assets/images/activemq5-masterslave/master-slave-1.png" style="width:40%" data-proofer-ignore></p><li><p>當 Master 異常並 Release KahaDB 後，其他 Slave 會爭奪變成新的 Master，接手原本的工作 <img data-src="/assets/images/activemq5-masterslave/master-slave-2.png" style="width:40%" data-proofer-ignore></p></ol><p>圖片來源: <a href="https://activemq.apache.org/failover-transport-reference.html">ActiveMQ - The Failover Transport</a></p><blockquote class="prompt-info"><div><p>在這種模式下只能有一個 Master，但可以有多個 Slave (1~N)。</p></div></blockquote><h2 id="implement"><span class="mr-2">Implement</span><a href="#implement" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><p>以下為環境資訊:</p><ul><li>Broker A Node<ul><li><code class="language-plaintext highlighter-rouge">192.168.89.131:61616</code><li>ActiveMQ 5.16.4<li>Ubuntu 20.04 LTS<li>JMS Protocol</ul><li>Broker B Node<ul><li><code class="language-plaintext highlighter-rouge">192.168.89.132:61616</code><li>ActiveMQ 5.16.4<li>Ubuntu 20.04 LTS<li>JMS Protocol</ul><li>Broker C Node<ul><li><code class="language-plaintext highlighter-rouge">192.168.89.133:61616</code><li>ActiveMQ 5.16.4<li>Ubuntu 20.04 LTS<li>JMS Protocol</ul><li>NFS Server (<code class="language-plaintext highlighter-rouge">192.168.89.134</code>)</ul><p><img data-src="/assets/images/activemq5-masterslave/master-slave-3.png" style="width:100%" data-proofer-ignore></p><blockquote class="prompt-info"><div><p>如果要用 NFS 要用 NFSv4 不要用 NFSv3 會有問題，可查看 <a href="https://activemq.apache.org/shared-file-system-master-slave">Official - Shared File System Master Slave</a></p></div></blockquote><blockquote class="prompt-info"><div><p>NFS Server 建置方式有相當多種，可以參考 <a href="https://www.gushiciku.cn/pl/gMoM/zh-tw">Ubuntu 20.04 中配置NFS服務</a> ，在此不特別闡述</p></div></blockquote><ol><li>下載 ActiveMQ 5.16.4<div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>而在 Shared File System Master Slave 模式下，會把 Shared File System Volume 掛載到 KahaDB 目錄裡，如此一來 Master 跟所有 Slave ActiveMQ 節點都會取得同一個 KahaDB 資料，且這種方式會整合 Lock 機制，先搶到存取權的節點將會變成 Master，而其他結點就會變成 Slave， Slave 狀態的節點大部分服務都不會啟動，只會啟動一個很簡單的 Java 檔，定期檢查 KahaDB 是否已經被 Release，如有被 Release，就會啟動全部服務搶先變成 Master。</p>
+
+<ol>
+  <li>
+    <p>啟用時，只會有一台 Master 存在，其他搶輸的為 Slave (在此 Database1 為 KahaDB)
+<img data-src="/assets/images/activemq5-masterslave/master-slave-1.png" style="width:40%" data-proofer-ignore></p>
+  </li>
+  <li>
+    <p>當 Master 異常並 Release KahaDB 後，其他 Slave 會爭奪變成新的 Master，接手原本的工作
+<img data-src="/assets/images/activemq5-masterslave/master-slave-2.png" style="width:40%" data-proofer-ignore></p>
+  </li>
+</ol>
+
+<p>圖片來源: <a href="https://activemq.apache.org/failover-transport-reference.html">ActiveMQ - The Failover Transport</a></p>
+
+<blockquote class="prompt-info"><div>
+  <p>在這種模式下只能有一個 Master，但可以有多個 Slave (1~N)。</p>
+</div></blockquote>
+
+<h2 id="implement"><span class="mr-2">Implement</span><a href="#implement" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<p>以下為環境資訊:</p>
+<ul>
+  <li>Broker A Node
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">192.168.89.131:61616</code></li>
+      <li>ActiveMQ 5.16.4</li>
+      <li>Ubuntu 20.04 LTS</li>
+      <li>JMS Protocol</li>
+    </ul>
+  </li>
+  <li>Broker B Node
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">192.168.89.132:61616</code></li>
+      <li>ActiveMQ 5.16.4</li>
+      <li>Ubuntu 20.04 LTS</li>
+      <li>JMS Protocol</li>
+    </ul>
+  </li>
+  <li>Broker C Node
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">192.168.89.133:61616</code></li>
+      <li>ActiveMQ 5.16.4</li>
+      <li>Ubuntu 20.04 LTS</li>
+      <li>JMS Protocol</li>
+    </ul>
+  </li>
+  <li>NFS Server (<code class="language-plaintext highlighter-rouge">192.168.89.134</code>)</li>
+</ul>
+
+<p><img data-src="/assets/images/activemq5-masterslave/master-slave-3.png" style="width:100%" data-proofer-ignore></p>
+
+<blockquote class="prompt-info"><div>
+  <p>如果要用 NFS 要用 NFSv4 不要用 NFSv3 會有問題，可查看 <a href="https://activemq.apache.org/shared-file-system-master-slave">Official - Shared File System Master Slave</a></p>
+</div></blockquote>
+
+<blockquote class="prompt-info"><div>
+  <p>NFS Server 建置方式有相當多種，可以參考 <a href="https://www.gushiciku.cn/pl/gMoM/zh-tw">Ubuntu 20.04 中配置NFS服務</a> ，在此不特別闡述</p>
+</div></blockquote>
+
+<ol>
+  <li>下載 ActiveMQ 5.16.4
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-</pre><td class="rouge-code"><pre><span class="nv">$ </span>wget https://archive.apache.org/dist/activemq/5.16.4/apache-activemq-5.16.4-bin.tar.gz
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span>wget https://archive.apache.org/dist/activemq/5.16.4/apache-activemq-5.16.4-bin.tar.gz
 <span class="nv">$ </span><span class="nb">tar </span>zxvf apache-activemq-5.16.4-bin.tar.gz
 <span class="nv">$ </span><span class="nb">cd </span>apache-activemq-5.16.4
-</pre></table></code></div></div><li>三台 Broker Node 都建立一個 <code class="language-plaintext highlighter-rouge">/mnt/KahaDB</code> 目錄並掛載 NFS Volume，這個目錄就是用來存放 KahaDB Data。<div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>三台 Broker Node 都建立一個 <code class="language-plaintext highlighter-rouge">/mnt/KahaDB</code> 目錄並掛載 NFS Volume，這個目錄就是用來存放 KahaDB Data。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre><td class="rouge-code"><pre><span class="nv">$ </span>mmkdir <span class="nt">-p</span> /mnt/kahaDB
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span>mmkdir <span class="nt">-p</span> /mnt/kahaDB
 <span class="nv">$ </span>mount <span class="nt">-t</span> nfs4 <span class="nt">-o</span> <span class="nv">proto</span><span class="o">=</span>tcp,port<span class="o">=</span>2049 192.168.89.134:/nfs /mnt/kahaDB/
-</pre></table></code></div></div><li>接著修改三台 <code class="language-plaintext highlighter-rouge">activemq.xml</code>，設定 kahaDB 目錄位置。<div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre><span class="nv">$ </span>vim apache-activemq-5.16.4/conf/activemq.xml
-</pre></table></code></div></div><p>將 <code class="language-plaintext highlighter-rouge">persistenceAdapter</code> 改成如下</p><div class="language-xml highlighter-rouge"><div class="code-header"> <span data-label-text="XML"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>接著修改三台 <code class="language-plaintext highlighter-rouge">activemq.xml</code>，設定 kahaDB 目錄位置。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span>vim apache-activemq-5.16.4/conf/activemq.xml
+</pre></td></tr></tbody></table></code></div>    </div>
+    <p>將 <code class="language-plaintext highlighter-rouge">persistenceAdapter</code> 改成如下</p>
+    <div class="language-xml highlighter-rouge"><div class="code-header">
+        <span data-label-text="XML"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-</pre><td class="rouge-code"><pre>     <span class="nt">&lt;persistenceAdapter&gt;</span>
+</pre></td><td class="rouge-code"><pre>     <span class="nt">&lt;persistenceAdapter&gt;</span>
          <span class="nt">&lt;kahaDB</span> <span class="na">directory=</span><span class="s">"/mnt/kahaDB"</span><span class="nt">/&gt;</span>
      <span class="nt">&lt;/persistenceAdapter&gt;</span>
-</pre></table></code></div></div><li>接著就可以啟動三台 ActiveMQ Broker。<div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>接著就可以啟動三台 ActiveMQ Broker。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
-</pre><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">cd </span>apache-activemq-5.16.4/bin/
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span><span class="nb">cd </span>apache-activemq-5.16.4/bin/
 <span class="nv">$ </span>./activemq start
-</pre></table></code></div></div><li><p>啟動後可以發現只有 Broker C 真正有啟動服務 (8161 port, 61616 port)，Broker A 跟 Broker B 都只有啟動一隻 java 程式而已，表示 Broker C 為 Master，其他兩台為 Slave。<br /> Broker A <img data-src="/assets/images/activemq5-masterslave/brokera.png" style="width:100%" data-proofer-ignore> Broker B <img data-src="/assets/images/activemq5-masterslave/brokerb.png" style="width:100%" data-proofer-ignore> Broker C <img data-src="/assets/images/activemq5-masterslave/brokerc.png" style="width:100%" data-proofer-ignore></p><li>查看 Broker A 跟 Broker B Log (<code class="language-plaintext highlighter-rouge">apache-activemq-5.16.3/data/acrivemq.log</code>)，可以發現該台 Broker 為 Slave Mode。<div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>
+    <p>啟動後可以發現只有 Broker C 真正有啟動服務 (8161 port, 61616 port)，Broker A 跟 Broker B 都只有啟動一隻 java 程式而已，表示 Broker C 為 Master，其他兩台為 Slave。<br />
+Broker A
+<img data-src="/assets/images/activemq5-masterslave/brokera.png" style="width:100%" data-proofer-ignore>
+Broker B
+<img data-src="/assets/images/activemq5-masterslave/brokerb.png" style="width:100%" data-proofer-ignore>
+Broker C
+<img data-src="/assets/images/activemq5-masterslave/brokerc.png" style="width:100%" data-proofer-ignore></p>
+  </li>
+  <li>查看 Broker A 跟 Broker B Log (<code class="language-plaintext highlighter-rouge">apache-activemq-5.16.3/data/acrivemq.log</code>)，可以發現該台 Broker 為 Slave Mode。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-</pre><td class="rouge-code"><pre>2022-01-10 08:34:29,383 | INFO  | Refreshing org.apache.activemq.xbean.XBeanBrokerFactory<span class="nv">$1</span>@7cc0cdad: startup <span class="nb">date</span> <span class="o">[</span>Mon Jan 10 08:34:29 UTC 2022]<span class="p">;</span> root of context hierarchy | org.apache.activemq.xbean.XBeanBrokerFactory<span class="nv">$1</span> | main
+</pre></td><td class="rouge-code"><pre>2022-01-10 08:34:29,383 | INFO  | Refreshing org.apache.activemq.xbean.XBeanBrokerFactory<span class="nv">$1</span>@7cc0cdad: startup <span class="nb">date</span> <span class="o">[</span>Mon Jan 10 08:34:29 UTC 2022]<span class="p">;</span> root of context hierarchy | org.apache.activemq.xbean.XBeanBrokerFactory<span class="nv">$1</span> | main
 2022-01-10 08:34:31,638 | INFO  | Using Persistence Adapter: KahaDBPersistenceAdapter[/mnt/kahaDB] | org.apache.activemq.broker.BrokerService | main
 2022-01-10 08:34:31,667 | INFO  | Database /mnt/kahaDB/lock is locked by another server. This broker is now <span class="k">in </span>slave mode waiting a lock to be acquired | org.apache.activemq.store.SharedFileLocker | main
-</pre></table></code></div></div><li>接著在 Producer 及 Consumer 設定 <a href="https://activemq.apache.org/failover-transport-reference.html">Failover Transport</a>，這樣 Producer/Consumer 就會自動連上可以使用的 ActiveMQ，並且在 ActiveMQ 異常時，自動 Failover 切換連線到其他台。在此 HA 模式下，由於只有 Broker C 目前是有啟用 61616 port 的，因此只會連到 Broker C。<div class="language-java highlighter-rouge"><div class="code-header"> <span data-label-text="Java"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>接著在 Producer 及 Consumer 設定 <a href="https://activemq.apache.org/failover-transport-reference.html">Failover Transport</a>，這樣 Producer/Consumer 就會自動連上可以使用的 ActiveMQ，並且在 ActiveMQ 異常時，自動 Failover 切換連線到其他台。在此 HA 模式下，由於只有 Broker C 目前是有啟用 61616 port 的，因此只會連到 Broker C。
+    <div class="language-java highlighter-rouge"><div class="code-header">
+        <span data-label-text="Java"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
-</pre><td class="rouge-code"><pre><span class="o">...</span>
+</pre></td><td class="rouge-code"><pre><span class="o">...</span>
  <span class="nc">ActiveMQConnectionFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ActiveMQConnectionFactory</span><span class="o">(</span><span class="s">"failover:(tcp://192.168.89.131:61616,tcp://192.168.89.132:61616,tcp://192.168.89.133:61616)"</span><span class="o">);</span>
 <span class="o">...</span>
-</pre></table></code></div></div><blockquote class="prompt-info"><div><p>Client 程式範例可以參考 <a href="https://activemq.apache.org/cross-language-clients">Cross Language Clients</a>。</p></div></blockquote><li>完成後設定後，可以測試執行 <code class="language-plaintext highlighter-rouge">apache-activemq-5.16.4/examples/openwire/java</code> 目錄裡的範例程式傳送 Message (1000 筆)，這時 Client 會連到 Broker C。<div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre><span class="nv">$ </span>java <span class="nt">-cp</span> target/openwire-example-0.1-SNAPSHOT.jar example.Publisher
-</pre></table></code></div></div><p>可以看到 Broker C 裡面有 1000 筆 Message <img data-src="/assets/images/activemq5-masterslave/publisher_to_brokerc.png" style="width:100%" data-proofer-ignore></p><li>接著執行 Consumer 程式，會連到 Broker C，然後開始取資料<div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre><span class="nv">$ </span>java <span class="nt">-cp</span> target/openwire-example-0.1-SNAPSHOT.jar example.Listener
-</pre></table></code></div></div><p><img data-src="/assets/images/activemq5-masterslave/consumer_to_brokerc.png" style="width:100%" data-proofer-ignore></p><li>取到一半把 Broker C 關閉掉，模擬異常<div class="language-java highlighter-rouge"><div class="code-header"> <span data-label-text="Java"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre><span class="o">./</span><span class="n">activemq</span> <span class="n">stop</span>
-</pre></table></code></div></div><blockquote class="prompt-tip"><div><p>如果 Consumer 接收 Message 過快的話，可以試著在程式加 sleep 機制，讓他放慢速度，比較好測試</p></div></blockquote><li><p>大約等幾秒可以看到 Broker B 服務啟動了並接手了工作，變成 Master，然後 Consumer 會改成連至 Broker B，然後繼續從 Queue 取沒取完的 Message。 <img data-src="/assets/images/activemq5-masterslave/new_master_brokerb_1.png" style="width:100%" data-proofer-ignore> <img data-src="/assets/images/activemq5-masterslave/new_master_brokerb_2.png" style="width:100%" data-proofer-ignore></p><li>完成。</ol><h2 id="referemce"><span class="mr-2">Referemce</span><a href="#referemce" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2><ul><li><a href="https://activemq.apache.org/failover-transport-reference.html">ActiveMQ - The Failover Transport</a><li><a href="https://activemq.apache.org/shared-file-system-master-slave">ActiveMQ - Shared File System Master Slave</a><li><a href="https://activemq.apache.org/clustering">ActiveMQ - Clustering</a><li><a href="https://activemq.apache.org/cross-language-clients">Cross Language Clients</a></ul><blockquote class="prompt-info"><div><p>文章內容的轉載、重製、發佈，請註明出處: <a href="https://pohsienshih.github.io">https://pohsienshih.github.io</a></p></div></blockquote></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/others/'>Others</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/activemq/" class="post-tag no-text-decoration" >activemq</a> <a href="/tags/master-slave/" class="post-tag no-text-decoration" >master-slave</a> <a href="/tags/high-availability/" class="post-tag no-text-decoration" >high availability</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=ActiveMQ 5 Shared File System Master Slave - Po-Hsien Workspace&amp;url=https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=ActiveMQ 5 Shared File System Master Slave - Po-Hsien Workspace&amp;u=https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/&amp;text=ActiveMQ 5 Shared File System Master Slave - Po-Hsien Workspace" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">Recently Updated</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/blog/mariadb-master-slave-replication-with-maxscale/">MariaDB Master-Slave Replication with MaxScale</a></ul></div><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/kubernetes/">kubernetes</a> <a class="post-tag" href="/tags/personal/">Personal</a> <a class="post-tag" href="/tags/conference/">conference</a> <a class="post-tag" href="/tags/high-availability/">high availability</a> <a class="post-tag" href="/tags/pks/">pks</a> <a class="post-tag" href="/tags/testing/">testing</a> <a class="post-tag" href="/tags/activemq/">activemq</a> <a class="post-tag" href="/tags/elk/">ELK</a> <a class="post-tag" href="/tags/log/">log</a> <a class="post-tag" href="/tags/mariadb/">mariadb</a></div></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">Contents</div><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/blog/mariadb-master-slave-replication-with-maxscale/"><div class="card-body"> <em class="timeago small" data-ts="1646483061" > 2022-03-05 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>MariaDB Master-Slave Replication with MaxScale</h3><div class="text-muted small"><p> 最近因工作關係剛好研究到 MariaDB High Availability (HA) 機制，因此本篇整理一下 MariaDB Master-Slave Replication 的相關筆記。 在一個系統環境裡，資料庫通常扮演著很重要的角色，主要負責存放系統的一些紀錄或是使用者的資料，因此資料庫的備援/高可用性 (High Availability)以及負載平衡 (Load Balancin...</p></div></div></a></div><div class="card"> <a href="/blog/elk-filebeat-with-log-rotate/"><div class="card-body"> <em class="timeago small" data-ts="1569355870" > 2019-09-24 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>ELK Filebeat With Log Rotate</h3><div class="text-muted small"><p> Log Rotate意思是當log隨著時間擴大後，能夠自動打包壓縮或是清除掉舊log，以免系統空間被log吃光。 ELK Filebeat並無支援log rotate的功能，Beats主要功能是做log shipping，不包含log rotate，因此需要透過額外的方式做。 在此文章中測試環境為 Ubuntu Server 18.04 LTS 方法1: logrotate ...</p></div></div></a></div><div class="card"> <a href="/blog/2020-voicetube-hero/"><div class="card-body"> <em class="timeago small" data-ts="1597104000" > 2020-08-11 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>2020 VoiceTube Hero 零元挑戰心得</h3><div class="text-muted small"><p> 今年二月的時候，想說加強英文，報名了 VoiceTube Hero 挑戰，然後還直接報名當時第八屆最長的 6 個月 90 堂課挑戰。然後因為怕沒動力所以抓了其他朋友一起挑戰，還創個群組大家每天互相提醒要上課。 這個挑戰主要是在期限內(6個月內)，符合以下條件，就可以全額退費： 上完 90 堂課 每堂課複習 2 次，也就是半年要上 90 * 3 = 270 次 每週至少要上 1...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/blog/mariadb-master-slave-replication-with-maxscale/" class="btn btn-outline-primary" prompt="Older"><p>MariaDB Master-Slave Replication with MaxScale</p></a> <span class="btn btn-outline-primary disabled" prompt="Newer"><p>-</p></span></div></div></div></div><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center text-muted"><div class="footer-left"><p class="mb-0"> © 2022 <a href="https://github.com/username">Po-Hsien Shih</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/kubernetes/">kubernetes</a> <a class="post-tag" href="/tags/personal/">Personal</a> <a class="post-tag" href="/tags/conference/">conference</a> <a class="post-tag" href="/tags/high-availability/">high availability</a> <a class="post-tag" href="/tags/pks/">pks</a> <a class="post-tag" href="/tags/testing/">testing</a> <a class="post-tag" href="/tags/activemq/">activemq</a> <a class="post-tag" href="/tags/elk/">ELK</a> <a class="post-tag" href="/tags/log/">log</a> <a class="post-tag" href="/tags/mariadb/">mariadb</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script> <script defer src="https://www.googletagmanager.com/gtag/js?id=G-SZFTFH1NJD"></script> <script> document.addEventListener("DOMContentLoaded", function(event) { window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-SZFTFH1NJD'); }); </script>
+</pre></td></tr></tbody></table></code></div>    </div>
+    <blockquote class="prompt-info"><div>
+      <p>Client 程式範例可以參考 <a href="https://activemq.apache.org/cross-language-clients">Cross Language Clients</a>。</p>
+    </div></blockquote>
+  </li>
+  <li>完成後設定後，可以測試執行 <code class="language-plaintext highlighter-rouge">apache-activemq-5.16.4/examples/openwire/java</code> 目錄裡的範例程式傳送  Message (1000 筆)，這時 Client 會連到 Broker C。
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span>java <span class="nt">-cp</span> target/openwire-example-0.1-SNAPSHOT.jar example.Publisher
+</pre></td></tr></tbody></table></code></div>    </div>
+    <p>可以看到 Broker C 裡面有 1000 筆 Message
+<img data-src="/assets/images/activemq5-masterslave/publisher_to_brokerc.png" style="width:100%" data-proofer-ignore></p>
+  </li>
+  <li>接著執行 Consumer 程式，會連到 Broker C，然後開始取資料
+    <div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nv">$ </span>java <span class="nt">-cp</span> target/openwire-example-0.1-SNAPSHOT.jar example.Listener
+</pre></td></tr></tbody></table></code></div>    </div>
+    <p><img data-src="/assets/images/activemq5-masterslave/consumer_to_brokerc.png" style="width:100%" data-proofer-ignore></p>
+  </li>
+  <li>取到一半把 Broker C 關閉掉，模擬異常
+    <div class="language-java highlighter-rouge"><div class="code-header">
+        <span data-label-text="Java"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="o">./</span><span class="n">activemq</span> <span class="n">stop</span>
+</pre></td></tr></tbody></table></code></div>    </div>
+
+    <blockquote class="prompt-tip"><div>
+      <p>如果 Consumer 接收 Message 過快的話，可以試著在程式加 sleep 機制，讓他放慢速度，比較好測試</p>
+    </div></blockquote>
+  </li>
+  <li>
+    <p>大約等幾秒可以看到 Broker B 服務啟動了並接手了工作，變成 Master，然後 Consumer 會改成連至 Broker B，然後繼續從 Queue 取沒取完的 Message。 
+<img data-src="/assets/images/activemq5-masterslave/new_master_brokerb_1.png" style="width:100%" data-proofer-ignore>
+<img data-src="/assets/images/activemq5-masterslave/new_master_brokerb_2.png" style="width:100%" data-proofer-ignore></p>
+  </li>
+  <li>完成。</li>
+</ol>
+
+<h2 id="reference"><span class="mr-2">Reference</span><a href="#reference" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2></h2>
+<ul>
+  <li><a href="https://activemq.apache.org/failover-transport-reference.html">ActiveMQ - The Failover Transport</a></li>
+  <li><a href="https://activemq.apache.org/shared-file-system-master-slave">ActiveMQ - Shared File System Master Slave</a></li>
+  <li><a href="https://activemq.apache.org/clustering">ActiveMQ - Clustering</a></li>
+  <li><a href="https://activemq.apache.org/cross-language-clients">Cross Language Clients</a></li>
+</ul>
+
+<blockquote class="prompt-info"><div>
+  <p>文章內容的轉載、重製、發佈，請註明出處: <a href="https://pohsienshih.github.io">https://pohsienshih.github.io</a></p>
+</div></blockquote>
+
+</div>
+
+<div class="post-tail-wrapper text-muted">
+
+  <!-- categories -->
+  
+  <div class="post-meta mb-3">
+    <i class="far fa-folder-open fa-fw mr-1"></i>
+    
+      <a href='/categories/others/'>Others</a>
+  </div>
+  
+
+  <!-- tags -->
+  
+  <div class="post-tags">
+    <i class="fa fa-tags fa-fw mr-1"></i>
+      
+      <a href="/tags/activemq/"
+          class="post-tag no-text-decoration" >activemq</a>
+      
+      <a href="/tags/master-slave/"
+          class="post-tag no-text-decoration" >master-slave</a>
+      
+      <a href="/tags/high-availability/"
+          class="post-tag no-text-decoration" >high availability</a>
+      
+  </div>
+  
+
+  <div class="post-tail-bottom
+    d-flex justify-content-between align-items-center mt-3 pt-5 pb-2">
+    <div class="license-wrapper">
+
+      
+
+        
+
+        This post is licensed under 
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          CC BY 4.0
+        </a>
+         by the author.
+
+      
+    </div>
+
+    <!--
+ Post sharing snippet
+-->
+
+<div class="share-wrapper">
+  <span class="share-label text-muted mr-1">Share</span>
+  <span class="share-icons">
+    
+    
+
+    
+      
+        <a href="https://twitter.com/intent/tweet?text=ActiveMQ 5 Shared File System Master Slave - Po-Hsien Workspace&amp;url=http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" data-toggle="tooltip" data-placement="top"
+          title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
+          <i class="fa-fw fab fa-twitter"></i>
+        </a>
+    
+      
+        <a href="https://www.facebook.com/sharer/sharer.php?title=ActiveMQ 5 Shared File System Master Slave - Po-Hsien Workspace&amp;u=http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" data-toggle="tooltip" data-placement="top"
+          title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
+          <i class="fa-fw fab fa-facebook-square"></i>
+        </a>
+    
+      
+        <a href="https://t.me/share/url?url=http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/&amp;text=ActiveMQ 5 Shared File System Master Slave - Po-Hsien Workspace" data-toggle="tooltip" data-placement="top"
+          title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
+          <i class="fa-fw fab fa-telegram"></i>
+        </a>
+    
+
+    <i id="copy-link" class="fa-fw fas fa-link small"
+        data-toggle="tooltip" data-placement="top"
+        title="Copy link"
+        data-title-succeed="Link copied successfully!">
+    </i>
+
+  </span>
+</div>
+
+
+  </div><!-- .post-tail-bottom -->
+
+</div><!-- div.post-tail-wrapper -->
+
+
+      
+    
+    
+
+    </div>
+  </div> <!-- #core-wrapper -->
+
+  <!-- pannel -->
+  <div id="panel-wrapper" class="col-xl-3 pl-2 text-muted">
+
+    <div class="access">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div id="access-lastmod" class="post">
+    <div class="panel-heading">Recently Updated</div>
+    <ul class="post-content pl-0 pb-1 ml-1 mt-2">
+      
+        
+        
+        
+      <li><a href="/blog/activemq5-shared-file-system-master-slave/">ActiveMQ 5 Shared File System Master Slave</a></li>
+      
+        
+        
+        
+      <li><a href="/blog/mariadb-master-slave-replication-with-maxscale/">MariaDB Master-Slave Replication with MaxScale</a></li>
+      
+    </ul>
+  </div> <!-- #access-lastmod -->
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+  <div id="access-tags">
+    <div class="panel-heading">Trending Tags</div>
+    <div class="d-flex flex-wrap mt-3 mb-1 mr-3">
+
+    
+      
+      <a class="post-tag" href="/tags/kubernetes/">kubernetes</a>
+    
+      
+      <a class="post-tag" href="/tags/conference/">conference</a>
+    
+      
+      <a class="post-tag" href="/tags/personal/">Personal</a>
+    
+      
+      <a class="post-tag" href="/tags/high-availability/">high availability</a>
+    
+      
+      <a class="post-tag" href="/tags/pks/">pks</a>
+    
+      
+      <a class="post-tag" href="/tags/testing/">testing</a>
+    
+      
+      <a class="post-tag" href="/tags/activemq/">activemq</a>
+    
+      
+      <a class="post-tag" href="/tags/elk/">ELK</a>
+    
+      
+      <a class="post-tag" href="/tags/log/">log</a>
+    
+      
+      <a class="post-tag" href="/tags/mariadb/">mariadb</a>
+    
+
+    </div>
+  </div>
+
+
+    </div>
+
+    
+      
+      
+
+
+
+<!-- BS-toc.js will be loaded at medium priority -->
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+
+<div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+  <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+  <nav id="toc" data-toggle="toc"></nav>
+</div>
+
+
+    
+  </div>
+
+</div>
+
+<!-- tail -->
+
+<div class="row">
+  <div class="col-12 col-lg-11 col-xl-8">
+    <div id="tail-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4">
+      
+        
+        <!--
+ Recommend the other 3 posts according to the tags and categories of the current post,
+ if the number is not enough, use the other latest posts to supplement.
+-->
+
+<!-- The total size of related posts  -->
+
+
+<!-- An random integer that bigger than 0  -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy}  -->
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+<!-- Fill with the other newlest posts  -->
+
+
+
+
+
+
+  <div id="related-posts" class="mt-5 mb-2 mb-sm-4">
+    <h3 class="pt-2 mt-1 mb-4 ml-1"
+      data-toc-skip>Further Reading</h3>
+    <div class="card-deck mb-4">
+    
+      
+      
+      <div class="card">
+        <a href="/blog/mariadb-master-slave-replication-with-maxscale/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago small"
+    data-ts="1646483061"
+    
+    >
+  2022-03-05
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>MariaDB Master-Slave Replication with MaxScale</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                最近因工作關係剛好研究到 MariaDB High Availability (HA) 機制，因此本篇整理一下 MariaDB Master-Slave Replication 的相關筆記。
+
+在一個系統環境裡，資料庫通常扮演著很重要的角色，主要負責存放系統的一些紀錄或是使用者的資料，因此資料庫的備援/高可用性 (High Availability)以及負載平衡 (Load Balancin...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/blog/elk-filebeat-with-log-rotate/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago small"
+    data-ts="1569355870"
+    
+    >
+  2019-09-24
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>ELK Filebeat With Log Rotate</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                Log Rotate意思是當log隨著時間擴大後，能夠自動打包壓縮或是清除掉舊log，以免系統空間被log吃光。
+
+ELK Filebeat並無支援log rotate的功能，Beats主要功能是做log shipping，不包含log rotate，因此需要透過額外的方式做。
+
+
+
+  在此文章中測試環境為 Ubuntu Server 18.04 LTS
+
+
+方法1: logrotate ...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/blog/2020-voicetube-hero/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/timeago.js
+-->
+
+<em class="timeago small"
+    data-ts="1597104000"
+    
+    >
+  2020-08-11
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>2020 VoiceTube Hero 零元挑戰心得</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                今年二月的時候，想說加強英文，報名了 VoiceTube Hero 挑戰，然後還直接報名當時第八屆最長的 6 個月 90 堂課挑戰。然後因為怕沒動力所以抓了其他朋友一起挑戰，還創個群組大家每天互相提醒要上課。
+
+這個挑戰主要是在期限內(6個月內)，符合以下條件，就可以全額退費：
+
+  上完 90 堂課
+  每堂課複習 2 次，也就是半年要上 90 * 3 = 270 次
+  每週至少要上 1...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+    </div> <!-- .card-deck -->
+  </div> <!-- #related-posts -->
+
+
+      
+        
+        <!--
+  Navigation buttons at the bottom of the post.
+-->
+
+<div class="post-navigation d-flex justify-content-between">
+  
+  <a href="/blog/mariadb-master-slave-replication-with-maxscale/" class="btn btn-outline-primary"
+    prompt="Older">
+    <p>MariaDB Master-Slave Replication with MaxScale</p>
+  </a>
+  
+
+  
+  <a href="/blog/coscup2022-the-journey-of-opensource-community-cntug/" class="btn btn-outline-primary"
+    prompt="Newer">
+    <p>COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan</p>
+  </a>
+  
+
+</div>
+
+      
+        
+        <!--  The comments switcher -->
+
+
+      
+    </div>
+  </div>
+</div> <!-- .row -->
+
+
+
+        <!--
+  The Footer
+-->
+
+<footer class="d-flex w-100 justify-content-center">
+  <div class="d-flex justify-content-between align-items-center text-muted">
+    <div class="footer-left">
+      <p class="mb-0">
+        © 2022
+        <a href="https://github.com/username">Po-Hsien Shih</a>.
+        
+        <span data-toggle="tooltip" data-placement="top"
+          title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span>
+        
+      </p>
+    </div>
+
+    <div class="footer-right">
+      <p class="mb-0">
+        
+
+        
+
+        Powered by 
+          <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
+         with 
+          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>
+         theme.
+
+      </p>
+    </div>
+
+  </div> <!-- div.d-flex -->
+</footer>
+
+
+      </div>
+
+      <!--
+  The Search results
+-->
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded">
+  <div class="col-12 col-sm-11 post-content">
+    <div id="search-hints">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+
+
+  <div id="access-tags">
+    <div class="panel-heading">Trending Tags</div>
+    <div class="d-flex flex-wrap mt-3 mb-1 mr-3">
+
+    
+      
+      <a class="post-tag" href="/tags/kubernetes/">kubernetes</a>
+    
+      
+      <a class="post-tag" href="/tags/conference/">conference</a>
+    
+      
+      <a class="post-tag" href="/tags/personal/">Personal</a>
+    
+      
+      <a class="post-tag" href="/tags/high-availability/">high availability</a>
+    
+      
+      <a class="post-tag" href="/tags/pks/">pks</a>
+    
+      
+      <a class="post-tag" href="/tags/testing/">testing</a>
+    
+      
+      <a class="post-tag" href="/tags/activemq/">activemq</a>
+    
+      
+      <a class="post-tag" href="/tags/elk/">ELK</a>
+    
+      
+      <a class="post-tag" href="/tags/log/">log</a>
+    
+      
+      <a class="post-tag" href="/tags/mariadb/">mariadb</a>
+    
+
+    </div>
+  </div>
+
+
+    </div>
+    <div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+  </div>
+</div>
+
+
+    </div> <!-- #main-wrapper -->
+
+    
+
+    <div id="mask"></div>
+
+    <a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!--
+  Jekyll Simple Search loader
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+-->
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
+
+<script>
+SimpleJekyllSearch({
+  searchInput: document.getElementById('search-input'),
+  resultsContainer: document.getElementById('search-results'),
+  json: '/assets/js/data/search.json',
+  searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0">  <a href="{url}">{title}</a>  <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">    {categories}    {tags}  </div>  <p>{snippet}</p></div>',
+  noResultsText: '<p class="mt-5">Oops! No result founds.</p>',
+  templateMiddleware: function(prop, value, template) {
+    if (prop === 'categories') {
+      if (value === '') {
+        return `${value}`;
+      } else {
+        return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+      }
+    }
+
+    if (prop === 'tags') {
+      if (value === '') {
+        return `${value}`;
+      } else {
+        return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+      }
+    }
+  }
+});
+</script>
+
+
+    <!--
+  JS selector for site.
+-->
+
+<!-- layout specified -->
+
+
+  
+
+
+
+  <!-- image lazy-loading & popup & clipboard -->
+  
+
+  
+
+
+
+
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+  
+    
+
+    
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script>
+
+
+
+
+
+
+
+
+<script defer src="/assets/js/dist/post.min.js"></script>
+
+
+
+<!-- commons -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+  </body>
+
+</html>
+
