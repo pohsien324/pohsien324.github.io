@@ -1,17 +1,17 @@
 
 
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <id>http://0.0.0.0:4000/</id>
+  <id>https://blog.phshih.com/</id>
   <title>Po-Hsien Workspace</title>
   <subtitle>Po-Hsien, pohsien, Cloud Native, Containerization, Virtualization, Linux Technologies. </subtitle>
-  <updated>2023-01-14T06:06:36+00:00</updated>
+  <updated>2023-01-14T14:22:47+08:00</updated>
   <author>
     <name>Po-Hsien Shih</name>
-    <uri>http://0.0.0.0:4000/</uri>
+    <uri>https://blog.phshih.com/</uri>
   </author>
-  <link rel="self" type="application/atom+xml" href="http://0.0.0.0:4000/feed.xml"/>
+  <link rel="self" type="application/atom+xml" href="https://blog.phshih.com/feed.xml"/>
   <link rel="alternate" type="text/html" hreflang="en"
-    href="http://0.0.0.0:4000/"/>
+    href="https://blog.phshih.com/"/>
   <generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator>
   <rights> © 2023 Po-Hsien Shih </rights>
   <icon>/assets/img/favicons/favicon.ico</icon>
@@ -21,13 +21,13 @@
   
   <entry>
     <title>2022 個人年度回顧</title>
-    <link href="http://0.0.0.0:4000/blog/2022-review/" rel="alternate" type="text/html" title="2022 個人年度回顧" />
-    <published>2022-12-31T20:25:20+00:00</published>
+    <link href="https://blog.phshih.com/blog/2022-review/" rel="alternate" type="text/html" title="2022 個人年度回顧" />
+    <published>2022-12-31T20:25:20+08:00</published>
   
-    <updated>2022-12-31T20:25:20+00:00</updated>
+    <updated>2022-12-31T20:25:20+08:00</updated>
   
-    <id>http://0.0.0.0:4000/blog/2022-review/</id>
-    <content src="http://0.0.0.0:4000/blog/2022-review/" />
+    <id>https://blog.phshih.com/blog/2022-review/</id>
+    <content src="https://blog.phshih.com/blog/2022-review/" />
     <author>
       <name>Po-Hsien Shih</name>
     </author>
@@ -65,13 +65,13 @@
   
   <entry>
     <title>COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan</title>
-    <link href="http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/" rel="alternate" type="text/html" title="COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan" />
-    <published>2022-08-01T00:00:00+00:00</published>
+    <link href="https://blog.phshih.com/blog/coscup2022-the-journey-of-opensource-community-cntug/" rel="alternate" type="text/html" title="COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan" />
+    <published>2022-08-01T00:00:00+08:00</published>
   
-    <updated>2023-01-14T05:58:04+00:00</updated>
+    <updated>2023-01-14T13:58:04+08:00</updated>
   
-    <id>http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/</id>
-    <content src="http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/" />
+    <id>https://blog.phshih.com/blog/coscup2022-the-journey-of-opensource-community-cntug/</id>
+    <content src="https://blog.phshih.com/blog/coscup2022-the-journey-of-opensource-community-cntug/" />
     <author>
       <name>Po-Hsien Shih</name>
     </author>
@@ -104,13 +104,13 @@
   
   <entry>
     <title>ActiveMQ 5 Shared File System Master Slave</title>
-    <link href="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" rel="alternate" type="text/html" title="ActiveMQ 5 Shared File System Master Slave" />
-    <published>2022-04-21T23:14:58+00:00</published>
+    <link href="https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" rel="alternate" type="text/html" title="ActiveMQ 5 Shared File System Master Slave" />
+    <published>2022-04-22T07:14:58+08:00</published>
   
-    <updated>2023-01-14T05:58:04+00:00</updated>
+    <updated>2023-01-14T13:58:04+08:00</updated>
   
-    <id>http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/</id>
-    <content src="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" />
+    <id>https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/</id>
+    <content src="https://blog.phshih.com/blog/activemq5-shared-file-system-master-slave/" />
     <author>
       <name>Po-Hsien Shih</name>
     </author>
@@ -145,13 +145,13 @@ ActiveMQ 5 HA 分成兩種方式:
   
   <entry>
     <title>MariaDB Master-Slave Replication with MaxScale</title>
-    <link href="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" rel="alternate" type="text/html" title="MariaDB Master-Slave Replication with MaxScale" />
-    <published>2022-03-05T12:24:21+00:00</published>
+    <link href="https://blog.phshih.com/blog/mariadb-master-slave-replication-with-maxscale/" rel="alternate" type="text/html" title="MariaDB Master-Slave Replication with MaxScale" />
+    <published>2022-03-05T20:24:21+08:00</published>
   
-    <updated>2023-01-14T05:58:04+00:00</updated>
+    <updated>2023-01-14T13:58:04+08:00</updated>
   
-    <id>http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/</id>
-    <content src="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" />
+    <id>https://blog.phshih.com/blog/mariadb-master-slave-replication-with-maxscale/</id>
+    <content src="https://blog.phshih.com/blog/mariadb-master-slave-replication-with-maxscale/" />
     <author>
       <name>Po-Hsien Shih</name>
     </author>
@@ -189,13 +189,13 @@ ActiveMQ 5 HA 分成兩種方式:
   
   <entry>
     <title>2021 個人年度回顧</title>
-    <link href="http://0.0.0.0:4000/blog/2021-review/" rel="alternate" type="text/html" title="2021 個人年度回顧" />
-    <published>2021-12-31T22:02:55+00:00</published>
+    <link href="https://blog.phshih.com/blog/2021-review/" rel="alternate" type="text/html" title="2021 個人年度回顧" />
+    <published>2021-12-31T22:02:55+08:00</published>
   
-    <updated>2023-01-14T05:58:04+00:00</updated>
+    <updated>2023-01-14T13:58:04+08:00</updated>
   
-    <id>http://0.0.0.0:4000/blog/2021-review/</id>
-    <content src="http://0.0.0.0:4000/blog/2021-review/" />
+    <id>https://blog.phshih.com/blog/2021-review/</id>
+    <content src="https://blog.phshih.com/blog/2021-review/" />
     <author>
       <name>Po-Hsien Shih</name>
     </author>
