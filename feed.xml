@@ -4,7 +4,7 @@
   <id>http://0.0.0.0:4000/</id>
   <title>Po-Hsien Workspace</title>
   <subtitle>Po-Hsien, pohsien, Cloud Native, Containerization, Virtualization, Linux Technologies. </subtitle>
-  <updated>2022-08-01T16:06:24+00:00</updated>
+  <updated>2023-01-14T06:06:36+00:00</updated>
   <author>
     <name>Po-Hsien Shih</name>
     <uri>http://0.0.0.0:4000/</uri>
@@ -13,10 +13,54 @@
   <link rel="alternate" type="text/html" hreflang="en"
     href="http://0.0.0.0:4000/"/>
   <generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator>
-  <rights> © 2022 Po-Hsien Shih </rights>
+  <rights> © 2023 Po-Hsien Shih </rights>
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>2022 個人年度回顧</title>
+    <link href="http://0.0.0.0:4000/blog/2022-review/" rel="alternate" type="text/html" title="2022 個人年度回顧" />
+    <published>2022-12-31T20:25:20+00:00</published>
+  
+    <updated>2022-12-31T20:25:20+00:00</updated>
+  
+    <id>http://0.0.0.0:4000/blog/2022-review/</id>
+    <content src="http://0.0.0.0:4000/blog/2022-review/" />
+    <author>
+      <name>Po-Hsien Shih</name>
+    </author>
+
+  
+    
+    <category term="Others" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      2022 是一個變化多端的一年，不管是職場上還是生活上都嘗試了許多新事物，嘗試改變以往的習慣、心態及生活方式，慢慢地調整成自己的目標，整體來說是一個具有好的轉折點的一年。
+
+2022 回顧
+生活
+
+  報名健身房跟教練課，調整飲食跟維持體態，了解到許多飲食控制、肌肉以及伸展相關知識，也意識到以前訓練方式很多都是錯誤的，還好能即時挑整。
+  報名了拳擊課，很舒壓，但是後來因為身體因素，上了幾堂後還是忍痛取消，這是我覺得最可惜的事。
+  參加了英文寫作跟口說班，每個禮拜都花很多時間在寫作業，非常累，但感覺英文程度跟以前比起來有進步一些，目標是希望之後部落格文章能使用英文撰寫。
+  找到了能互相扶持的人，每個月到處踩雷踩點，為 2022 添加了許多豐富的色彩。
+  第一次跑到台中跨年看煙火，上一次衝到別縣市跨年應該是大學時期的時候了，頓時覺得己年輕了起來。
+  今年有幸能跟社群夥伴 Fra...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -24,7 +68,7 @@
     <link href="http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/" rel="alternate" type="text/html" title="COSCUP 2022 - 那些年我們在開源社群的日子 - Cloud Native Taiwan" />
     <published>2022-08-01T00:00:00+00:00</published>
   
-    <updated>2022-08-01T00:00:00+00:00</updated>
+    <updated>2023-01-14T05:58:04+00:00</updated>
   
     <id>http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/</id>
     <content src="http://0.0.0.0:4000/blog/coscup2022-the-journey-of-opensource-community-cntug/" />
@@ -63,7 +107,7 @@
     <link href="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" rel="alternate" type="text/html" title="ActiveMQ 5 Shared File System Master Slave" />
     <published>2022-04-21T23:14:58+00:00</published>
   
-    <updated>2022-08-01T15:02:01+00:00</updated>
+    <updated>2023-01-14T05:58:04+00:00</updated>
   
     <id>http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/</id>
     <content src="http://0.0.0.0:4000/blog/activemq5-shared-file-system-master-slave/" />
@@ -104,7 +148,7 @@ ActiveMQ 5 HA 分成兩種方式:
     <link href="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" rel="alternate" type="text/html" title="MariaDB Master-Slave Replication with MaxScale" />
     <published>2022-03-05T12:24:21+00:00</published>
   
-    <updated>2022-06-06T03:52:26+00:00</updated>
+    <updated>2023-01-14T05:58:04+00:00</updated>
   
     <id>http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/</id>
     <content src="http://0.0.0.0:4000/blog/mariadb-master-slave-replication-with-maxscale/" />
@@ -148,7 +192,7 @@ ActiveMQ 5 HA 分成兩種方式:
     <link href="http://0.0.0.0:4000/blog/2021-review/" rel="alternate" type="text/html" title="2021 個人年度回顧" />
     <published>2021-12-31T22:02:55+00:00</published>
   
-    <updated>2021-12-31T22:02:55+00:00</updated>
+    <updated>2023-01-14T05:58:04+00:00</updated>
   
     <id>http://0.0.0.0:4000/blog/2021-review/</id>
     <content src="http://0.0.0.0:4000/blog/2021-review/" />
@@ -193,52 +237,6 @@ ActiveMQ 5 HA 分成兩種方式:
 
 
   成功帶完 ...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>2020 個人年度回顧</title>
-    <link href="http://0.0.0.0:4000/blog/2020-review/" rel="alternate" type="text/html" title="2020 個人年度回顧" />
-    <published>2020-12-31T16:25:20+00:00</published>
-  
-    <updated>2020-12-31T16:25:20+00:00</updated>
-  
-    <id>http://0.0.0.0:4000/blog/2020-review/</id>
-    <content src="http://0.0.0.0:4000/blog/2020-review/" />
-    <author>
-      <name>Po-Hsien Shih</name>
-    </author>
-
-  
-    
-    <category term="Others" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      2020 回顧
-
-2020 年真的是讓人印象深刻的一年，因為新冠肺炎影響關係，許多計畫都被影響，但就整體上來看，今年對我個人來說仍然算是一個蠻有收穫的一年，做了許多嘗試以及達各種成就。
-
-工作方面
-今年初換了新公司，算是一個新的開始，雖然忙到炸裂，進去還沒過試用期，就忙到好像過了好幾年一樣，但卻是忙得有意義，非常充實。
-
-
-
-  新公司: 換了新公司，一個新的開始。
-  Work From Home 初體驗: 由於部門較彈性加上疫情關係，因此可以在家上班，算是一個新的體驗，不過雖然 Work From Home 很自由，但是也有相對的缺點，例如同事溝通討論困難、沒有下班的感覺或邊緣化 QQ 之類的。
-  帶實習生: 一次帶了 8 個實習生(大學生)，雖然工作量增加了，但是跟這群年輕大學生一起 co-work 也為工作氛圍帶來了幾分樂趣。
-  半夜系統升版: 第一次體驗半夜到客戶那邊升...
     </summary>
   
 
